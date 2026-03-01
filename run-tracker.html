@@ -6,23 +6,25 @@
     <title>Run Tracker</title>
     <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/one-more-night-official/images/9/9b/Empty-HandedIcon.png/revision/latest?cb=20250219191405">
     <style>
+        /* Define global CSS variables for easy theming and consistent colors */
         :root {
-            color-scheme: dark !important;
+            color-scheme: dark !important; /* Force dark mode scrollbars and browser UI */
             --bg-color: #121212;
             --card-bg: #1e1e1e;
             --text-main: #e0e0e0;
             --text-muted: #888888;
-            --accent: #4CAF50;
+            --accent: #4CAF50; /* Green accent for generic progress */
             --border: #333333;
-            --danger: #d32f2f;
+            --danger: #d32f2f; /* Red for reset buttons */
             --danger-hover: #b71c1c;
             --progress-bg: #333;
-            --gold: #ffd700;
-            --purple: #a333c8;
-            --threat-color: hsl(30, 100%, 50%);
-            --generic-color: hsl(190, 100%, 50%);
+            --gold: #ffd700; /* Gold for Tarot items */
+            --purple: #a333c8; /* Purple for WOF items */
+            --threat-color: hsl(30, 100%, 50%); /* Orange/Red for threats */
+            --generic-color: hsl(190, 100%, 50%); /* Cyan/Blue for generic penalties */
         }
 
+        /* Basic body reset and font setup */
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
@@ -31,6 +33,7 @@
             padding: 0 20px 20px 20px;
         }
 
+        /* Tab navigation styling, made sticky to stay at the top during scroll */
         .tabs {
             display: flex;
             gap: 10px;
@@ -40,9 +43,10 @@
             position: sticky;
             top: 0;
             background: var(--bg-color);
-            z-index: 30;
+            z-index: 30; /* Ensure tabs stay above content */
         }
 
+        /* Individual tab buttons */
         .tab-btn {
             background: transparent;
             color: var(--text-muted);
@@ -52,27 +56,31 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -2px;
+            border-bottom: 3px solid transparent; /* Hidden border for alignment */
+            margin-bottom: -2px; /* Overlap the parent's bottom border */
         }
 
         .tab-btn:hover {
             color: var(--text-main);
         }
 
+        /* Active tab indicator */
         .tab-btn.active {
             color: var(--text-main);
             border-bottom: 3px solid var(--accent);
         }
 
+        /* Hide inactive tab content */
         .tab-content {
             display: none;
         }
 
+        /* Show active tab content */
         .tab-content.active {
             display: flex;
         }
 
+        /* Layout for the main content areas */
         .dashboard {
             width: 100%;
             max-width: none;
@@ -83,9 +91,10 @@
             box-sizing: border-box;
         }
 
+        /* Sticky header for search, filters, and progress bars within each tab */
         .header-controls {
             position: sticky;
-            top: 65px;
+            top: 65px; /* Offset to clear the sticky tabs above */
             background-color: var(--bg-color);
             z-index: 10;
             padding: 10px 0 20px 0;
@@ -95,44 +104,44 @@
             gap: 15px;
         }
 
+        /* Container for search and filter buttons */
         .top-row { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .search-wrapper { position: relative; flex-grow: 1; min-width: 250px; display: flex; align-items: center; }
         
+        /* Search input styling */
         .search-input {
             width: 100%; padding: 14px 45px 14px 18px; background: var(--card-bg);
             border: 1px solid var(--border); border-radius: 10px; color: var(--text-main);
-            font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
+            font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
         }
         .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2); }
         
-        @keyframes flashEffect {
-            0% { box-shadow: 0 0 15px var(--accent); border-color: var(--accent); background-color: rgba(76, 175, 80, 0.15); }
-            100% { box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2); border-color: var(--accent); background-color: var(--card-bg); }
-        }
-        .search-input.flash {
-            animation: flashEffect 0.5s ease-out;
-        }
-
+        /* Button to clear the search input */
         .clear-search {
             position: absolute; right: 15px; background: none; border: none; color: var(--text-muted);
             font-size: 1.2rem; cursor: pointer; display: none; padding: 0; width: auto; height: auto;
         }
 
+        /* Container for the category toggle pills */
         .category-filters { display: flex; gap: 10px; flex-wrap: wrap; }
         
+        /* Interactive pill buttons for filtering categories */
         .filter-pill {
             padding: 8px 16px; background: var(--card-bg); border: 1px solid var(--border);
             border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
             cursor: pointer; transition: all 0.2s; user-select: none; display: flex; gap: 6px;
         }
+        /* Muted text for the "(X left)" counter inside pills */
         .filter-pill .remaining-count { opacity: 0.6; font-weight: 400; }
 
+        /* Animation keyframes for a glowing effect on completed categories/items */
         @keyframes pulseGlow {
             0% { box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
             50% { box-shadow: 0 0 15px var(--glow-color); border-color: var(--border-color, inherit); }
             100% { box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         }
 
+        /* Specific colors for active filter pills based on category */
         .filter-pill#filter-item-generics.active { border-color: var(--accent); color: var(--accent); background: rgba(76, 175, 80, 0.1); }
         .filter-pill#filter-item-tarots.active { border-color: var(--gold); color: var(--gold); background: rgba(255, 215, 0, 0.1); }
         .filter-pill#filter-item-wofs.active { border-color: var(--purple); color: var(--purple); background: rgba(163, 51, 200, 0.1); }
@@ -140,6 +149,7 @@
         .filter-pill#filter-penalty-generics.active { border-color: var(--generic-color); color: var(--generic-color); background: hsla(190, 100%, 50%, 0.1); }
         .filter-pill#filter-penalty-threats.active { border-color: var(--threat-color); color: var(--threat-color); background: hsla(30, 100%, 50%, 0.1); }
 
+        /* Glowing states for filter pills when a category is 100% complete */
         .filter-pill.complete#filter-item-generics { animation: pulseGlow 3s infinite ease-in-out; --glow-color: rgba(76, 175, 80, 0.4); --border-color: var(--accent); color: var(--accent) !important; background: rgba(76, 175, 80, 0.05) !important; }
         .filter-pill.complete#filter-item-tarots { animation: pulseGlow 3s infinite ease-in-out; --glow-color: rgba(255, 215, 0, 0.4); --border-color: var(--gold); color: var(--gold) !important; background: rgba(255, 215, 0, 0.05) !important; }
         .filter-pill.complete#filter-item-wofs { animation: pulseGlow 3s infinite ease-in-out; --glow-color: rgba(163, 51, 200, 0.4); --border-color: var(--purple); color: var(--purple) !important; background: rgba(163, 51, 200, 0.05) !important; }
@@ -147,6 +157,7 @@
         .filter-pill.complete#filter-penalty-generics { animation: pulseGlow 3s infinite ease-in-out; --glow-color: hsla(190, 100%, 50%, 0.4); --border-color: var(--generic-color); color: var(--generic-color) !important; background: hsla(190, 100%, 50%, 0.05) !important; }
         .filter-pill.complete#filter-penalty-threats { animation: pulseGlow 3s infinite ease-in-out; --glow-color: hsla(30, 100%, 50%, 0.4); --border-color: var(--threat-color); color: var(--threat-color) !important; background: hsla(30, 100%, 50%, 0.05) !important; }
 
+        /* Styling for utility toggles (like "Hide Completed" or "Exclude Heatstroke") */
         .toggle-completed-container {
             display: flex; align-items: center; gap: 8px; background: var(--card-bg);
             padding: 0 15px; height: 46px; border-radius: 10px; border: 1px solid var(--border);
@@ -155,11 +166,13 @@
         }
         .toggle-completed-container.active { border-color: var(--accent); color: var(--text-main); }
 
+        /* Overall progress bar container at the top of a tab */
         .stats-bar { background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border); }
         .stats-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: bold; }
         .progress-container { width: 100%; height: 10px; background: var(--progress-bg); border-radius: 5px; overflow: hidden; }
         .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.4s ease, background-color 0.4s ease; }
 
+        /* Headers for individual categories (e.g., "Generic Items", "Tarot Cards") */
         .section-header {
             display: flex; align-items: center; border-bottom: 2px solid var(--border);
             margin-bottom: 1rem; cursor: pointer; user-select: none; gap: 20px;
@@ -167,22 +180,27 @@
         }
         .section-header h1 { border-bottom: none; margin: 0; font-size: 1.5rem; white-space: nowrap; }
 
+        /* Special background tints for category headers when that category is 100% complete */
         .section-header.mastery-item-generics { background-color: rgba(76, 175, 80, 0.08); border-color: var(--accent); }
         .section-header.mastery-item-tarots { background-color: rgba(255, 215, 0, 0.08); border-color: var(--gold); }
         .section-header.mastery-item-wofs { background-color: rgba(163, 51, 200, 0.1); border-color: var(--purple); }
         .section-header.mastery-penalty-generics { background-color: hsla(190, 100%, 50%, 0.08); border-color: var(--generic-color); }
         .section-header.mastery-penalty-threats { background-color: hsla(30, 100%, 50%, 0.08); border-color: var(--threat-color); }
 
+        /* Small progress bar embedded within the section header */
         .section-progress-wrapper { flex-grow: 1; max-width: 300px; display: flex; flex-direction: column; gap: 4px; }
         .section-progress-text { font-size: 0.7rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase; }
         .section-progress-container { width: 100%; height: 6px; background: var(--progress-bg); border-radius: 3px; overflow: hidden; }
         .section-progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.4s ease, background-color 0.4s ease; opacity: 0.8; }
         
+        /* Expand/Collapse text button in section headers */
         .toggle-btn { background: none; border: none; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; width: auto; height: auto; padding: 5px 10px; font-weight: bold; cursor: pointer; }
 
+        /* Responsive grid layout for the item/penalty cards */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; padding: 0 5px; }
-        .grid-container.collapsed { display: none !important; }
+        .grid-container.collapsed { display: none !important; } /* Hide grid when section is collapsed */
 
+        /* Individual item/penalty card styling */
         .row {
             display: flex; flex-direction: column; background: var(--card-bg); padding: 12px 15px;
             border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); border: 1px solid var(--border);
@@ -191,12 +209,13 @@
         }
         .row:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
 
+        /* Styling for excluded items (specifically the Heatstroke penalty when toggled off) */
         .row.excluded {
             opacity: 0.4;
             filter: grayscale(100%);
             box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0,0,0,0.2) !important;
             border-color: #444 !important;
-            pointer-events: none;
+            pointer-events: none; /* Prevent clicking while excluded */
             background-color: #1a1a1a !important;
             animation: none !important;
         }
@@ -205,14 +224,17 @@
         .row.excluded .checkmark { visibility: hidden !important; }
         .row.excluded .item-bar-fill { background-color: #444 !important; }
 
+        /* Styles applied to cards when they hit their max cap (completion) */
         #item-generics .row.done { border-color: var(--accent); --glow-color: rgba(76, 175, 80, 0.4); animation: pulseGlow 3s infinite ease-in-out; background-color: #182818; }
         #item-tarots .row.done { border-color: var(--gold); --glow-color: rgba(255, 215, 0, 0.35); animation: pulseGlow 3s infinite ease-in-out; background-color: #282418; }
         #item-wofs .row.done { border-color: var(--purple); --glow-color: rgba(163, 51, 200, 0.4); animation: pulseGlow 3s infinite ease-in-out; background-color: #241828; }
         #penalty-generics .row.done { border-color: var(--generic-color); --glow-color: hsla(190, 100%, 50%, 0.4); animation: pulseGlow 3s infinite ease-in-out; background-color: hsla(190, 100%, 8%, 1); }
         #penalty-threats .row.done { border-color: var(--threat-color); --glow-color: hsla(30, 100%, 50%, 0.4); animation: pulseGlow 3s infinite ease-in-out; background-color: hsla(30, 100%, 8%, 1); }
 
+        /* Internal layout of the card content */
         .row-content { display: flex; align-items: center; width: 100%; flex-grow: 1; overflow: hidden; }
 
+        /* Image thumbnail placeholder/container */
         .image-column {
             display: flex; justify-content: center; align-items: center; width: 50px; height: 50px;
             flex-shrink: 0; margin-right: 15px; border-radius: 4px; background: #2a2a2a; overflow: hidden;
@@ -220,40 +242,52 @@
         .image-column img { width: 100%; height: 100%; object-fit: contain; }
         .placeholder-img { color: #777; font-size: 10px; text-align: center; }
 
+        /* Text information container within the card */
         .item-info { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; justify-content: center; height: 100%; }
+        /* Item title text clamping to prevent extremely long names from breaking layout */
         .item-name { font-weight: 600; font-size: 0.95rem; white-space: normal; word-wrap: break-word; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
+        /* Completed item text colors matching their category themes */
         #item-generics .row.done .item-name { color: var(--accent); }
         #item-tarots .row.done .item-name { color: var(--gold); }
         #item-wofs .row.done .item-name { color: #d084e8; }
         #penalty-generics .row.done .item-name { color: var(--generic-color); }
         #penalty-threats .row.done .item-name { color: var(--threat-color); }
 
+        /* Smaller text for weight/chance info under the item name */
         .weight { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
 
+        /* Plus/Minus controls layout on the right side of the card */
         .controls { display: flex; align-items: center; gap: 8px; margin-left: 10px; flex-shrink: 0; }
+        /* Increment/Decrement buttons */
         button.btn-ctrl {
             background-color: #2a2a2a; border: 1px solid #444; color: var(--text-main); border-radius: 4px;
             width: 28px; height: 28px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;
         }
         button.btn-ctrl:hover { background-color: #3a3a3a; }
+        /* The textual counter (e.g. "1 / 3") */
         .counter-text { font-weight: bold; min-width: 35px; text-align: center; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
 
+        /* Checkmark indicating completion, hidden by default */
         .checkmark { visibility: hidden; opacity: 0; font-weight: bold; font-size: 1.1rem; margin-left: 2px; width: 18px; text-align: center; transition: opacity 0.3s ease, visibility 0.3s ease; }
         .row.done .checkmark { visibility: visible; opacity: 1; }
         
+        /* Colored checkmarks based on category */
         #item-generics .row.done .checkmark { color: var(--accent); }
         #item-tarots .row.done .checkmark { color: var(--gold); }
         #item-wofs .row.done .checkmark { color: var(--purple); }
         #penalty-generics .row.done .checkmark { color: var(--generic-color); }
         #penalty-threats .row.done .checkmark { color: var(--threat-color); }
 
+        /* Progress bar located at the bottom of each individual card */
         .item-bar-container { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-top: 4px; flex-shrink: 0; position: relative; }
         .item-bar-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease, background-color 0.3s ease; position: relative; overflow: hidden; }
 
+        /* Sparkle animation for completed progress bars */
         @keyframes barSparkle { 0% { left: -100%; } 100% { left: 200%; } }
         .item-bar-fill.sparkle::after { content: ''; position: absolute; top: 0; left: -100%; width: 80px; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent); animation: barSparkle 2.5s infinite linear; }
 
+        /* Container and styling for the dangerous reset buttons at the bottom */
         .reset-section { display: flex; justify-content: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
         .reset-btn { background-color: var(--danger); color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 1rem; font-weight: bold; width: auto; height: auto; cursor: pointer; }
         .reset-btn:hover { background-color: var(--danger-hover); }
@@ -261,7 +295,9 @@
     </style>
 
     <script id="item-generic-data" type="application/json">{"BloxyCola":{"image":"https://static.wikitide.net/onemorenightwiki/f/fb/BloxyCola.webp","weight":110,"cap":4},"PowerSavingMode":{"image":"https://static.wikitide.net/onemorenightwiki/1/1c/PowerSavingMode.webp","weight":"???","cap":2},"TarotCloth":{"image":"https://static.wikitide.net/onemorenightwiki/7/7b/TarotCloth.webp","weight":"???","cap":1},"TarotDeck":{"image":"https://static.wikitide.net/onemorenightwiki/d/d3/TarotDeck2.jpg","weight":10,"cap":2},"IncreasedPower":{"image":"https://static.wikitide.net/onemorenightwiki/4/45/IncreasedPower.webp","weight":80,"cap":7},"QuicklyOut":{"image":"https://static.wikitide.net/onemorenightwiki/b/b2/QuicklyOut.webp","weight":50,"cap":3},"BetterFlashlights":{"image":"https://static.wikitide.net/onemorenightwiki/d/db/BetterFlashlight.webp","weight":90,"cap":3},"MoreOptions":{"image":"https://static.wikitide.net/onemorenightwiki/9/99/MoreOptions.webp","weight":90,"cap":2},"Dumbell":{"image":"https://static.wikitide.net/onemorenightwiki/0/02/Dumbell.webp","weight":75,"cap":3},"GlassPillar":{"image":"https://static.wikitide.net/onemorenightwiki/a/a9/GlassPillar.webp","weight":75,"cap":1},"PolishedGenerator":{"image":"https://static.wikitide.net/onemorenightwiki/8/80/PolishedGenerator.webp","weight":"???","cap":3},"TurboMode":{"image":"https://static.wikitide.net/onemorenightwiki/2/23/TurboMode.webp","weight":20,"cap":1},"RiggingKit":{"image":"https://static.wikitide.net/onemorenightwiki/a/a1/RiggingKit.jpg","weight":45,"cap":1},"BrokenStopwatch":{"image":"https://static.wikitide.net/onemorenightwiki/b/b4/BrokenStopwatch.webp","weight":15,"cap":1},"SupplyAndDemand":{"image":"https://static.wikitide.net/onemorenightwiki/c/c0/SupplyAndDemand.jpg","weight":10,"cap":1},"BrokenDeal":{"image":"https://static.wikitide.net/onemorenightwiki/5/53/BrokenDeal.jpg","weight":25,"cap":1},"FlowerPot":{"image":"https://static.wikitide.net/onemorenightwiki/6/68/FlowerPot.jpg","weight":15,"cap":1},"ToughAsNails":{"image":"https://static.wikitide.net/onemorenightwiki/2/29/ToughAsNails.jpg","weight":20,"cap":1},"GlitchedCard":{"image":"https://static.wikitide.net/onemorenightwiki/d/de/GlitchedCard2.jpg","weight":3,"cap":1},"PhotoAlbum":{"image":"https://static.wikitide.net/onemorenightwiki/4/4c/PhotoAlbum.jpg","weight":15,"cap":2},"NinjaBelt":{"image":"https://static.wikia.nocookie.net/one-more-night-official/images/5/59/NinjaBelt.png/revision/latest?cb=20251224084522","weight":20,"cap":1},"LastRobloxianStanding":{"image":"https://static.wikia.nocookie.net/one-more-night-official/images/a/a2/LRS_Upgrade.png/revision/latest?cb=20251224084447","weight":25,"cap":1}}</script>
+    
     <script id="item-tarot-data" type="application/json">{"0-TheFool":{"image":"https://static.wikitide.net/onemorenightwiki/c/c0/KonoCard.png","weight":15,"cap":2},"1-TheMagician":{"image":"https://static.wikitide.net/onemorenightwiki/d/d3/RoxieCard.png","weight":5,"cap":2},"3-TheEmpress":{"image":"https://static.wikitide.net/onemorenightwiki/d/d9/DestroymanCard.png","weight":2,"cap":1},"4-TheEmperor":{"image":"https://static.wikitide.net/onemorenightwiki/7/7e/MikepikeCard.png","weight":4,"cap":1},"5-TheHierophant":{"image":"https://static.wikitide.net/onemorenightwiki/0/0c/DryCard.png","weight":10,"cap":2},"6?-TheLinked":{"image":"https://static.wikitide.net/onemorenightwiki/a/ac/LinkedCard.png","weight":7,"cap":2},"7-TheChariot":{"image":"https://static.wikitide.net/onemorenightwiki/f/f9/OliCard.png","weight":3,"cap":1},"8-Strength":{"image":"https://static.wikitide.net/onemorenightwiki/7/74/StormCard.png","weight":7,"cap":1},"9-TheHermit":{"image":"https://static.wikitide.net/onemorenightwiki/9/92/IsraCard.png","weight":7,"cap":2},"10-WheelOfFortune":{"image":"https://static.wikitide.net/onemorenightwiki/6/63/WOFCard.png","weight":"13 (+40 if bought before)","cap":1},"11-Justice":{"image":"https://static.wikitide.net/onemorenightwiki/9/97/PuppetCard.png","weight":5,"cap":1},"12?-TheOneWhoDied":{"image":"https://static.wikitide.net/onemorenightwiki/b/b4/JanCard.png","weight":8,"cap":1},"13-Death":{"image":"https://static.wikitide.net/onemorenightwiki/1/1e/FranCard.png","weight":7,"cap":1},"14-Temperance":{"image":"https://static.wikitide.net/onemorenightwiki/5/51/UpliftCard.png","weight":7,"cap":1},"15-TheDevil":{"image":"https://static.wikitide.net/onemorenightwiki/5/58/RaptorCard.png","weight":10,"cap":1},"16-TheTower":{"image":"https://static.wikitide.net/onemorenightwiki/f/fd/BadCard.png","weight":10,"cap":1},"17-TheStar":{"image":"https://static.wikitide.net/onemorenightwiki/a/a7/JordiCard.png","weight":12,"cap":1},"18-TheMoon":{"image":"https://static.wikitide.net/onemorenightwiki/9/92/MangoCard.png","weight":5,"cap":1},"19-TheSun":{"image":"https://static.wikitide.net/onemorenightwiki/9/96/WormcaveCard.png","weight":9,"cap":1},"20-Judgement":{"image":"https://static.wikitide.net/onemorenightwiki/1/1f/MyselfCard.png","weight":6,"cap":1},"21-TheWorld":{"image":"https://static.wikitide.net/onemorenightwiki/2/2a/ZGuestoCard.png","weight":10,"cap":1}}</script>
+    
     <script id="item-wof-data" type="application/json">{"WOFBloxyCola":{"image":"","chance":"5%","cap":4},"WOFBloxiade":{"image":"","chance":"5%","cap":4},"WOFCoffee":{"image":"","chance":"5%","cap":4},"WOFExtraPower":{"image":"","chance":"10%","cap":7}}</script>
 
     <script id="penalty-data" type="application/json">
@@ -286,7 +322,6 @@
         "Chef4Hire":{"image":"https://static.wikitide.net/onemorenightwiki/3/3d/NewChicken%27sIcon.png","cap":1},
         "CoralHeadache":{"image":"https://static.wikitide.net/onemorenightwiki/d/d4/DestroymanIII%27sIcon.png","cap":1},
         "MathClass":{"image":"https://static.wikitide.net/onemorenightwiki/6/69/Dry%27sIcon.png","cap":1},
-        "NotListening":{"image":"https://static.wikitide.net/onemorenightwiki/7/7e/Figure%27sIcon.png","cap":1},
         "Fox'sRushdown":{"image":"https://static.wikitide.net/onemorenightwiki/7/7a/Fox%27sIcon.png","cap":1},
         "SharpHook":{"image":"https://static.wikitide.net/onemorenightwiki/8/82/OldFox%27sIcon.png","cap":1},
         "Fran'sTenacity":{"image":"https://static.wikitide.net/onemorenightwiki/f/fc/Fran%27sIcon.png","cap":1},
@@ -337,7 +372,7 @@
         <div class="header-controls">
             <div class="top-row">
                 <div class="search-wrapper">
-                    <input type="text" id="itemSearch" class="search-input" placeholder="Search for items or cards..." oninput="filterItems()" onclick="clearItemSearch()">
+                    <input type="text" id="itemSearch" class="search-input" placeholder="Search for items or cards..." oninput="filterItems()">
                     <button class="clear-search" id="clearBtnItems" onclick="clearItemSearch()">✕</button>
                 </div>
                 
@@ -421,7 +456,7 @@
         <div class="header-controls">
             <div class="top-row">
                 <div class="search-wrapper">
-                    <input type="text" id="penSearch" class="search-input" placeholder="Search penalties..." oninput="filterPenalties()" onclick="clearPenaltySearch()">
+                    <input type="text" id="penSearch" class="search-input" placeholder="Search penalties..." oninput="filterPenalties()">
                     <button class="clear-search" id="clearBtnPenalties" onclick="clearPenaltySearch()">✕</button>
                 </div>
                 
@@ -447,7 +482,7 @@
             
             <div class="stats-bar">
                 <div class="stats-info">
-                    <span>Completion Progress</span>
+                    <span>Overall Progress</span>
                     <span id="penCompletionText">0 / 0 penalties (0%)</span>
                 </div>
                 <div class="progress-container">
@@ -490,69 +525,98 @@
     </main>
 
     <script>
+        // Simple identity function used for escaping IDs, currently just returns the string as-is
         function escapeId(id) { return id; }
         
+        // Generates an HSL color for Items: transitions from dark red (0%) to bright green (100%)
         function getProgressColor(percent) { 
             return `hsl(${(percent / 100) * 120}, 70%, 45%)`; 
         }
 
+        // Generates an HSL color for Penalties: reverses the logic, starting red and transitioning differently
         function getPenaltyProgressColor(percent) {
             return `hsl(${360 - ((percent / 100) * 75)}, 70%, 45%)`;
         }
 
+        // Handles switching between Items and Penalties views
         function switchTab(tabName) {
+            // Remove active classes from all contents and tabs
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
+            // Apply active class to the target tab
             document.getElementById(`tab-${tabName}`).classList.add('active');
             document.querySelector(`.tab-btn[data-target="${tabName}"]`).classList.add('active');
             
+            // Save state to localStorage so it remembers where you were on reload
             localStorage.setItem('runTrackerActiveTab', tabName);
         }
 
+        // Used to map numeric values in JSON keys (like "0-TheFool") to Roman Numerals
         const romanMap = ["0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI"];
 
+        // --- ITEM STATE MANAGEMENT ---
+        // Retrieve saved user data from localStorage, or initialize with defaults
         const itemCounts = JSON.parse(localStorage.getItem("itemTrackerCounts")) || {};
         const itemCollapsedStates = JSON.parse(localStorage.getItem("itemTrackerCollapsed")) || {};
         const itemActiveCats = JSON.parse(localStorage.getItem("itemTrackerActiveCats")) || {'item-generics': true, 'item-tarots': true, 'item-wofs': true};
         const itemHideCompleted = JSON.parse(localStorage.getItem("itemTrackerHideCompleted")) || false;
         
+        // Maps container IDs to the list of item IDs they hold
         const itemCategoryMap = { 'item-generics': [], 'item-tarots': [], 'item-wofs': [] };
+        // Quick lookup dictionary for each item's maximum cap
         const itemCaps = {};
 
+        // Reads JSON from the DOM script tags, formats strings, and dynamically builds HTML elements
         function renderItemCategory(scriptId, containerId) {
             const data = JSON.parse(document.getElementById(scriptId).textContent);
             const container = document.getElementById(containerId);
 
+            // Iterate through each item defined in the embedded JSON
             for (const [itemId, item] of Object.entries(data)) {
+                // Ensure the saved count doesn't exceed the newly loaded cap
                 itemCounts[itemId] = Math.min(item.cap, itemCounts[itemId] || 0);
                 itemCaps[itemId] = item.cap;
                 itemCategoryMap[containerId].push(itemId);
 
                 const safeId = escapeId(itemId);
+                // Create the img tag if a URL is provided, otherwise leave blank
                 const imageContent = item.image 
                     ? `<img src="${item.image}" alt="icon" loading="lazy" onerror="this.src='https://via.placeholder.com/50?text=?'">` 
                     : ``;
 
+                // Complex string formatting logic to prettify camelCase JSON keys
+                // E.g., "IncreasedPower" -> "Increased Power"
                 let displayName = itemId.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+                // Remove the "WOF " prefix if it exists
                 if (displayName.startsWith("WOF ")) displayName = displayName.replace("WOF ", "");
                 
+                // Replace numbers with Roman Numerals (e.g., "0-TheFool" -> "0-The Fool", wait, 0 stays 0 because of romanMap index 0)
                 displayName = displayName.replace(/^(\d+)/, (match) => romanMap[parseInt(match, 10)] || match);
+                // Clean up spacing around hyphens
                 displayName = displayName.replace(/\s*-\s*/, ' - ').trim();
+                // Lowercase specific small words for grammatical correctness
                 displayName = displayName.replace(/\b(And|As|Of|The|Who|Died)\b/g, (m) => m.toLowerCase());
+                // Ensure the very first letter is uppercase
                 displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+                // Ensure letters directly after a hyphen are uppercase
                 displayName = displayName.replace(/-\s*([a-z])/, (m, p1) => '- ' + p1.toUpperCase());
 
+                // Determine whether to display a "Chance" stat or a "Weight" stat
                 const statLabel = item.chance !== undefined ? `Chance: ${item.chance}` : `Weight: ${item.weight}`;
+                
+                // Calculate initial styling/state for the progress bar
                 const percent = (itemCounts[itemId] / item.cap) * 100;
                 const isDone = itemCounts[itemId] === item.cap ? "done" : "";
                 const sparkleClass = itemCounts[itemId] === item.cap ? "sparkle" : "";
-                const safeTitle = displayName.replace(/"/g, '&quot;');
+                const safeTitle = displayName.replace(/"/g, '&quot;'); // Escape quotes for the hover title tooltip
 
+                // Construct the actual DOM element
                 const row = document.createElement("div");
                 row.className = `row ${isDone}`;
                 row.id = `row-${itemId}`;
                 row.setAttribute('data-id', safeId);
+                // Clicking anywhere on the row increments the tracker
                 row.setAttribute('onclick', `updateItem(1, ${item.cap}, this.getAttribute('data-id'), event)`);
 
                 row.innerHTML = `
@@ -577,21 +641,25 @@
             }
         }
 
+        // Toggles the collapse state of a specific category section (e.g. Tarot Cards)
         function toggleItemSection(containerId) {
             const container = document.getElementById(containerId);
             const btn = document.getElementById('btn-' + containerId);
             const isCollapsed = container.classList.toggle('collapsed');
             btn.textContent = isCollapsed ? 'Expand' : 'Collapse';
+            // Save preference to localStorage
             itemCollapsedStates[containerId] = isCollapsed;
             localStorage.setItem("itemTrackerCollapsed", JSON.stringify(itemCollapsedStates));
         }
 
+        // Toggles whether a category is filtered completely out of view using the top pills
         function toggleItemCategoryVisibility(id) {
             itemActiveCats[id] = !itemActiveCats[id];
             localStorage.setItem("itemTrackerActiveCats", JSON.stringify(itemActiveCats));
             applyItemVisibilityStates();
         }
 
+        // Applies the display rules based on the active category pills
         function applyItemVisibilityStates() {
             for (const [id, active] of Object.entries(itemActiveCats)) {
                 const section = document.getElementById(`section-${id}`);
@@ -599,11 +667,13 @@
                 if (section) section.style.display = active ? 'block' : 'none';
                 if (pill) active ? pill.classList.add('active') : pill.classList.remove('active');
             }
-            filterItems();
+            filterItems(); // Re-run search/hide filters after updating categories
         }
 
+        // Recalculates and updates all math relating to percentages and totals (global and per-category)
         function updateItemStats() {
             let totalPossibleAll = 0, currentAll = 0;
+            // Iterate over every category to calculate section-level stats
             for (const [catId, itemIds] of Object.entries(itemCategoryMap)) {
                 let catPossible = 0, catCurrent = 0;
                 itemIds.forEach(id => { catPossible += (itemCaps[id] || 0); catCurrent += (itemCounts[id] || 0); });
@@ -620,6 +690,7 @@
                 
                 if(textElem) textElem.textContent = `${catPercent}%`;
                 
+                // If section is 100% complete, apply "MAX" text and glow animations
                 if (catRemaining === 0 && catPossible > 0) {
                     if(remElem) remElem.textContent = `(MAX)`;
                     if(pill) pill.classList.add('complete');
@@ -630,11 +701,13 @@
                     if(header) header.classList.remove(`mastery-${catId}`);
                 }
 
+                // Update category progress bar width and color
                 if(fillElem) {
                     fillElem.style.width = `${catPercent}%`;
                     fillElem.style.backgroundColor = getProgressColor(catPercent);
                 }
             }
+            // Update the global total text and main progress bar
             const totalPercent = totalPossibleAll > 0 ? Math.round((currentAll / totalPossibleAll) * 100) : 0;
             const compText = document.getElementById('itemCompletionText');
             const mainFill = document.getElementById('itemProgressFill');
@@ -646,42 +719,44 @@
             }
         }
 
+        // Empty the search input and re-filter
         function clearItemSearch() {
             const searchInput = document.getElementById('itemSearch');
-            
-            searchInput.classList.remove('flash');
-            void searchInput.offsetWidth; 
-            searchInput.classList.add('flash');
-            
-            setTimeout(() => searchInput.classList.remove('flash'), 500);
-            
             searchInput.value = '';
             filterItems();
             searchInput.focus();
         }
 
+        // Hides/Shows DOM rows based on the text search and the "Hide Completed" toggle
         function filterItems() {
             const query = document.getElementById('itemSearch').value.toLowerCase();
             const hideDone = document.getElementById('itemHideCompletedCb').checked;
             const clearBtn = document.getElementById('clearBtnItems');
+            // Show the "X" button only if there is text in the search box
             if(clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
 
+            // Persist the checkbox state
             localStorage.setItem("itemTrackerHideCompleted", JSON.stringify(hideDone));
             const wrapper = document.getElementById('itemHideCompletedWrapper');
             if(wrapper) hideDone ? wrapper.classList.add('active') : wrapper.classList.remove('active');
 
+            // Check every single row in the items tab
             document.querySelectorAll('#tab-items .row').forEach(row => {
                 const name = row.querySelector('.item-name').textContent.toLowerCase();
                 const isDone = row.classList.contains('done');
+                // Logic: Show if it matches search AND (it's not done OR we aren't hiding done items)
                 const shouldBeVisible = name.includes(query) && (!hideDone || !isDone);
                 row.style.display = shouldBeVisible ? 'flex' : 'none';
             });
 
+            // Automatically hide entire sections if they have no visible rows matching the query
             ['item-generics', 'item-tarots', 'item-wofs'].forEach(id => {
                 const section = document.getElementById(`section-${id}`);
-                if (!itemActiveCats[id]) return; 
+                if (!itemActiveCats[id]) return; // Skip if category is toggled off globally
                 const visibleRows = document.getElementById(id).querySelectorAll(`.row[style="display: flex;"], .row:not([style])`);
                 if(section) section.style.display = visibleRows.length > 0 ? 'block' : 'none';
+                
+                // If a user searches, automatically expand collapsed sections so they can see results
                 if (query !== "" && visibleRows.length > 0) {
                     const container = document.getElementById(id);
                     const btn = document.getElementById('btn-' + id);
@@ -691,28 +766,42 @@
             });
         }
 
+        // The core function for adding/subtracting from an item's count
         function updateItem(delta, cap, itemId, event) {
+            // Stop click event from bubbling up (crucial when clicking the - button inside the row)
             if (event) event.stopPropagation();
+            
+            // Calculate new count, clamping it between 0 and the item's max cap
             itemCounts[itemId] = Math.min(cap, Math.max(0, (itemCounts[itemId] || 0) + delta));
+            
+            // Grab necessary DOM elements for this specific item
             const rowElement = document.getElementById(`row-${itemId}`);
             const percent = (itemCounts[itemId] / cap) * 100;
             const safeId = escapeId(itemId);
             const counter = document.getElementById(`${safeId}Counter`);
             const bar = document.getElementById(`${safeId}Bar`);
             
+            // Update the counter text (e.g., 2 / 3)
             if(counter) counter.textContent = itemCounts[itemId];
+            
+            // Update the small progress bar at the bottom of the card
             if(bar) {
                 bar.style.width = percent + '%';
                 bar.style.backgroundColor = getProgressColor(percent);
+                // Add the shine animation if maxed out
                 itemCounts[itemId] === cap ? bar.classList.add("sparkle") : bar.classList.remove("sparkle");
             }
+            
+            // Toggle the 'done' class on the whole row, which triggers CSS changes (glows, checkmarks)
             if(rowElement) itemCounts[itemId] === cap ? rowElement.classList.add("done") : rowElement.classList.remove("done");
             
+            // Save state immediately and re-evaluate filters/stats
             localStorage.setItem("itemTrackerCounts", JSON.stringify(itemCounts));
-            filterItems();
+            filterItems(); // Run in case "Hide Completed" is active and an item just finished
             updateItemStats();
         }
 
+        // Wipes all item data from localStorage and resets the DOM
         function resetAllItems() {
             if (!confirm("Reset all item progress?")) return;
             for (const itemId in itemCounts) {
@@ -721,6 +810,7 @@
                 const safeId = escapeId(itemId);
                 const bar = document.getElementById(`${safeId}Bar`);
                 const counter = document.getElementById(`${safeId}Counter`);
+                
                 if(counter) counter.textContent = 0;
                 if(bar) { 
                     bar.style.width = '0%'; 
@@ -734,15 +824,20 @@
             updateItemStats();
         }
 
+        // --- PENALTY STATE MANAGEMENT ---
+        // (This mirrors the Item logic closely, with a few specific exceptions)
         const penCounts = JSON.parse(localStorage.getItem("penaltyTrackerCounts")) || {};
         const penCollapsedStates = JSON.parse(localStorage.getItem("penaltyTrackerCollapsed")) || {};
         const penActiveCats = JSON.parse(localStorage.getItem("penaltyTrackerActiveCats")) || {'penalty-generics': true, 'penalty-threats': true};
         const penHideCompleted = JSON.parse(localStorage.getItem("penaltyTrackerHideCompleted")) || false;
+        
+        // Specific state for the "Exclude Heatstroke" feature
         let heatstrokeExcluded = JSON.parse(localStorage.getItem("penaltyTrackerExcludeHeatstroke")) || false;
         
         const penCategoryMap = { 'penalty-generics': [], 'penalty-threats': [] };
         const penCaps = {};
 
+        // Hardcoded custom names for specific penalties where the generic regex spacing fails
         const penNameOverrides = {
             "Balloons4Sale": "Balloons 4 Sale",
             "Chef4Hire": "Chef 4 Hire",
@@ -752,9 +847,13 @@
             "CutTheStrings": "Cut the Strings"
         };
 
+        // Builds the Penalty grid
         function renderPenaltyCategories() {
             const data = JSON.parse(document.getElementById('penalty-data').textContent);
             const keys = Object.keys(data);
+            
+            // Since the JSON doesn't separate generic vs threat, we dynamically split them based on an index.
+            // The last 7 entries are considered "Generic", the rest are "Threats".
             const splitIndex = keys.length - 7;
 
             keys.forEach((itemId, index) => {
@@ -766,8 +865,10 @@
                 penCaps[itemId] = item.cap;
                 penCategoryMap[containerId].push(itemId);
 
+                // Use the override dictionary if it exists, otherwise use standard regex spacing
                 let displayName = penNameOverrides[itemId] || itemId.replace(/([a-z])([A-Z])/g, '$1 $2')
                                         .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+                                        // Specific regex to handle apostrophes correctly (e.g. "Barry's")
                                         .replace(/([a-z])(['])([a-z])/ig, '$1$2$3');
 
                 let displayCount = penCounts[itemId];
@@ -775,6 +876,7 @@
                 let isDone = displayCount === item.cap ? "done" : "";
                 let sparkleClass = displayCount === item.cap ? "sparkle" : "";
                 
+                // If Heatstroke is excluded, artificially set its display values to 0 without deleting its saved data
                 if (itemId === 'Heatstroke' && heatstrokeExcluded) {
                     displayCount = 0;
                     percent = 0;
@@ -787,6 +889,7 @@
 
                 const row = document.createElement("div");
                 row.className = `row ${isDone}`;
+                // Apply 'excluded' styling (greyscale, unclickable) if this is heatstroke and it's disabled
                 if (itemId === 'Heatstroke' && heatstrokeExcluded) {
                     row.classList.add('excluded');
                 }
@@ -817,20 +920,24 @@
             });
         }
 
+        // Logic for checking/unchecking the "Exclude Heatstroke" feature
         function toggleHeatstroke() {
             heatstrokeExcluded = document.getElementById('excludeHeatstrokeCb').checked;
             localStorage.setItem("penaltyTrackerExcludeHeatstroke", JSON.stringify(heatstrokeExcluded));
             const wrapper = document.getElementById('excludeHeatstrokeWrapper');
+            // Toggle highlight on the label button itself
             if (wrapper) heatstrokeExcluded ? wrapper.classList.add('active') : wrapper.classList.remove('active');
             
+            // Find the specific DOM node and alter its visuals without touching `penCounts['Heatstroke']`
             const hsRow = document.getElementById('row-Heatstroke');
             if (hsRow) {
                 const counter = document.getElementById('HeatstrokeCounter');
                 const bar = document.getElementById('HeatstrokeBar');
                 const itemCap = penCaps['Heatstroke'] || 1;
-                const realCount = penCounts['Heatstroke'] || 0;
+                const realCount = penCounts['Heatstroke'] || 0; // Retrieve the real saved state
 
                 if (heatstrokeExcluded) {
+                    // Visually disable it
                     hsRow.classList.add('excluded');
                     if (counter) counter.textContent = 0;
                     if (bar) {
@@ -840,6 +947,7 @@
                     }
                     hsRow.classList.remove('done');
                 } else {
+                    // Visually restore it to its actual saved state
                     hsRow.classList.remove('excluded');
                     if (counter) counter.textContent = realCount;
                     if (bar) {
@@ -853,10 +961,12 @@
                     else hsRow.classList.remove('done');
                 }
             }
+            // Math recalculation is required because maximum potential points just shifted
             updatePenaltyStats();
             filterPenalties();
         }
 
+        // Similar to toggleItemSection
         function togglePenaltySection(containerId) {
             const container = document.getElementById(containerId);
             const btn = document.getElementById('btn-' + containerId);
@@ -866,6 +976,7 @@
             localStorage.setItem("penaltyTrackerCollapsed", JSON.stringify(penCollapsedStates));
         }
 
+        // Similar to toggleItemCategoryVisibility
         function togglePenaltyCategoryVisibility(id) {
             penActiveCats[id] = !penActiveCats[id];
             localStorage.setItem("penaltyTrackerActiveCats", JSON.stringify(penActiveCats));
@@ -882,6 +993,7 @@
             filterPenalties();
         }
 
+        // Recalculates penalty math. Special case handling included for Heatstroke exclusion.
         function updatePenaltyStats() {
             let totalPossibleAll = 0, currentAll = 0;
             for (const [catId, itemIds] of Object.entries(penCategoryMap)) {
@@ -889,6 +1001,8 @@
                 itemIds.forEach(id => { 
                     let cap = penCaps[id] || 0;
                     catPossible += cap;
+                    // If Heatstroke is excluded, subtract its cap from the total possible denominator, 
+                    // and do not add its count to the current numerator.
                     if (id === 'Heatstroke' && heatstrokeExcluded) {
                         catPossible -= cap; 
                     } else {
@@ -936,13 +1050,6 @@
 
         function clearPenaltySearch() {
             const searchInput = document.getElementById('penSearch');
-            
-            searchInput.classList.remove('flash');
-            void searchInput.offsetWidth; 
-            searchInput.classList.add('flash');
-            
-            setTimeout(() => searchInput.classList.remove('flash'), 500);
-            
             searchInput.value = '';
             filterPenalties();
             searchInput.focus();
@@ -961,7 +1068,9 @@
             document.querySelectorAll('#tab-penalties .row').forEach(row => {
                 const name = row.querySelector('.item-name').textContent.toLowerCase();
                 let isDone = row.classList.contains('done');
+                // If "Hide Completed" is on, Heatstroke also needs to hide if it is currently excluded
                 if (row.id === 'row-Heatstroke' && heatstrokeExcluded) isDone = true;
+                
                 const shouldBeVisible = name.includes(query) && (!hideDone || !isDone);
                 row.style.display = shouldBeVisible ? 'flex' : 'none';
             });
@@ -974,8 +1083,10 @@
             });
         }
 
+        // Logic for updating penalty counts. Prevents action entirely if heatstroke is currently excluded.
         function updatePen(delta, cap, itemId, event) {
             if (event) event.stopPropagation();
+            // Block interaction for excluded heatstroke
             if (itemId === 'Heatstroke' && heatstrokeExcluded) return;
             
             penCounts[itemId] = Math.min(cap, Math.max(0, (penCounts[itemId] || 0) + delta));
@@ -998,6 +1109,7 @@
             updatePenaltyStats();
         }
 
+        // Wipes all penalty data from localStorage
         function resetAllPenalties() {
             if (!confirm("Reset all penalty progress?")) return;
             for (const itemId in penCounts) {
@@ -1007,6 +1119,7 @@
                 const bar = document.getElementById(`${safeId}Bar`);
                 const counter = document.getElementById(`${safeId}Counter`);
                 
+                // Keep Heatstroke looking disabled/excluded if the setting is active, otherwise reset it normally
                 if (itemId !== 'Heatstroke' || !heatstrokeExcluded) {
                     if (counter) counter.textContent = 0;
                     if (bar) { 
@@ -1022,20 +1135,25 @@
             updatePenaltyStats();
         }
 
+        // INITIALIZATION SCRIPT - Runs when the DOM is fully loaded
         window.onload = () => {
+            // Restore last active tab
             const savedTab = localStorage.getItem('runTrackerActiveTab') || 'items';
             switchTab(savedTab);
 
+            // Parse JSON and build the UI grids for items
             renderItemCategory("item-generic-data", "item-generics");
             renderItemCategory("item-tarot-data", "item-tarots");
             renderItemCategory("item-wof-data", "item-wofs");
             
+            // Restore 'Hide Completed' state for items
             const itemCb = document.getElementById('itemHideCompletedCb');
             if(itemCb) {
                 itemCb.checked = itemHideCompleted;
                 if(itemHideCompleted) document.getElementById('itemHideCompletedWrapper').classList.add('active');
             }
 
+            // Restore collapsed state for item sections
             ['item-generics', 'item-tarots', 'item-wofs'].forEach(id => {
                 if (itemCollapsedStates[id]) {
                     const container = document.getElementById(id);
@@ -1045,23 +1163,28 @@
                 }
             });
 
+            // Perform initial filtering and math calculations for Items
             applyItemVisibilityStates();
             updateItemStats();
 
+            // Parse JSON and build UI grid for penalties
             renderPenaltyCategories();
             
+            // Restore 'Hide Completed' state for penalties
             const penCb = document.getElementById('penHideCompletedCb');
             if(penCb) {
                 penCb.checked = penHideCompleted;
                 if(penHideCompleted) document.getElementById('penHideCompletedWrapper').classList.add('active');
             }
             
+            // Restore 'Exclude Heatstroke' state
             const hsCb = document.getElementById('excludeHeatstrokeCb');
             if(hsCb) {
                 hsCb.checked = heatstrokeExcluded;
                 if(heatstrokeExcluded) document.getElementById('excludeHeatstrokeWrapper').classList.add('active');
             }
             
+            // Restore collapsed state for penalty sections
             ['penalty-generics', 'penalty-threats'].forEach(id => {
                 if (penCollapsedStates[id]) {
                     const container = document.getElementById(id);
@@ -1071,6 +1194,7 @@
                 }
             });
 
+            // Perform initial filtering and math calculations for Penalties
             applyPenaltyVisibilityStates();
             updatePenaltyStats();
         };
