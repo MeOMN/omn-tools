@@ -653,6 +653,8 @@
             void searchInput.offsetWidth; 
             searchInput.classList.add('flash');
             
+            setTimeout(() => searchInput.classList.remove('flash'), 500);
+            
             searchInput.value = '';
             filterItems();
             searchInput.focus();
@@ -938,6 +940,8 @@
             searchInput.classList.remove('flash');
             void searchInput.offsetWidth; 
             searchInput.classList.add('flash');
+            
+            setTimeout(() => searchInput.classList.remove('flash'), 500);
             
             searchInput.value = '';
             filterPenalties();
