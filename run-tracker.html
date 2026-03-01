@@ -112,10 +112,19 @@
         .search-input {
             width: 100%; padding: 14px 45px 14px 18px; background: var(--card-bg);
             border: 1px solid var(--border); border-radius: 10px; color: var(--text-main);
-            font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
         }
         .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2); }
         
+        /* Animation keyframes for a visual flash when search is cleared */
+        @keyframes flashEffect {
+            0% { box-shadow: 0 0 15px var(--accent); border-color: var(--accent); background-color: rgba(76, 175, 80, 0.15); }
+            100% { box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2); border-color: var(--accent); background-color: var(--card-bg); }
+        }
+        .search-input.flash {
+            animation: flashEffect 0.5s ease-out;
+        }
+
         /* Button to clear the search input */
         .clear-search {
             position: absolute; right: 15px; background: none; border: none; color: var(--text-muted);
@@ -372,7 +381,7 @@
         <div class="header-controls">
             <div class="top-row">
                 <div class="search-wrapper">
-                    <input type="text" id="itemSearch" class="search-input" placeholder="Search for items or cards..." oninput="filterItems()">
+                    <input type="text" id="itemSearch" class="search-input" placeholder="Search for items or cards..." oninput="filterItems()" onclick="clearItemSearch()">
                     <button class="clear-search" id="clearBtnItems" onclick="clearItemSearch()">✕</button>
                 </div>
                 
@@ -456,7 +465,7 @@
         <div class="header-controls">
             <div class="top-row">
                 <div class="search-wrapper">
-                    <input type="text" id="penSearch" class="search-input" placeholder="Search penalties..." oninput="filterPenalties()">
+                    <input type="text" id="penSearch" class="search-input" placeholder="Search penalties..." oninput="filterPenalties()" onclick="clearPenaltySearch()">
                     <button class="clear-search" id="clearBtnPenalties" onclick="clearPenaltySearch()">✕</button>
                 </div>
                 
@@ -530,7 +539,7 @@
         
         // Generates an HSL color for Items: transitions from dark red (0%) to bright green (100%)
         function getProgressColor(percent) { 
-            return `hsl(${(percent / 100) * 120}, 70%, 45%)`; 
+            return `hsl(${(percent / 100) * 120}, 70%, 45%)`;
         }
 
         // Generates an HSL color for Penalties: reverses the logic, starting red and transitioning differently
@@ -564,6 +573,7 @@
         
         // Maps container IDs to the list of item IDs they hold
         const itemCategoryMap = { 'item-generics': [], 'item-tarots': [], 'item-wofs': [] };
+        
         // Quick lookup dictionary for each item's maximum cap
         const itemCaps = {};
 
@@ -588,20 +598,25 @@
                 // Complex string formatting logic to prettify camelCase JSON keys
                 // E.g., "IncreasedPower" -> "Increased Power"
                 let displayName = itemId.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+                
                 // Remove the "WOF " prefix if it exists
                 if (displayName.startsWith("WOF ")) displayName = displayName.replace("WOF ", "");
                 
                 // Replace numbers with Roman Numerals (e.g., "0-TheFool" -> "0-The Fool", wait, 0 stays 0 because of romanMap index 0)
                 displayName = displayName.replace(/^(\d+)/, (match) => romanMap[parseInt(match, 10)] || match);
+                
                 // Clean up spacing around hyphens
                 displayName = displayName.replace(/\s*-\s*/, ' - ').trim();
+                
                 // Lowercase specific small words for grammatical correctness
                 displayName = displayName.replace(/\b(And|As|Of|The|Who|Died)\b/g, (m) => m.toLowerCase());
+                
                 // Ensure the very first letter is uppercase
                 displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+                
                 // Ensure letters directly after a hyphen are uppercase
                 displayName = displayName.replace(/-\s*([a-z])/, (m, p1) => '- ' + p1.toUpperCase());
-
+                
                 // Determine whether to display a "Chance" stat or a "Weight" stat
                 const statLabel = item.chance !== undefined ? `Chance: ${item.chance}` : `Weight: ${item.weight}`;
                 
@@ -667,12 +682,14 @@
                 if (section) section.style.display = active ? 'block' : 'none';
                 if (pill) active ? pill.classList.add('active') : pill.classList.remove('active');
             }
-            filterItems(); // Re-run search/hide filters after updating categories
+            // Re-run search/hide filters after updating categories
+            filterItems();
         }
 
         // Recalculates and updates all math relating to percentages and totals (global and per-category)
         function updateItemStats() {
             let totalPossibleAll = 0, currentAll = 0;
+            
             // Iterate over every category to calculate section-level stats
             for (const [catId, itemIds] of Object.entries(itemCategoryMap)) {
                 let catPossible = 0, catCurrent = 0;
@@ -707,6 +724,7 @@
                     fillElem.style.backgroundColor = getProgressColor(catPercent);
                 }
             }
+            
             // Update the global total text and main progress bar
             const totalPercent = totalPossibleAll > 0 ? Math.round((currentAll / totalPossibleAll) * 100) : 0;
             const compText = document.getElementById('itemCompletionText');
@@ -719,9 +737,18 @@
             }
         }
 
-        // Empty the search input and re-filter
+        // Empty the search input, trigger visual flash, and re-filter
         function clearItemSearch() {
             const searchInput = document.getElementById('itemSearch');
+            
+            // Reset and trigger the flash animation
+            searchInput.classList.remove('flash');
+            void searchInput.offsetWidth; // Trigger reflow to restart animation
+            searchInput.classList.add('flash');
+            
+            // Clean up the animation class after it finishes (500ms)
+            setTimeout(() => searchInput.classList.remove('flash'), 500);
+            
             searchInput.value = '';
             filterItems();
             searchInput.focus();
@@ -732,6 +759,7 @@
             const query = document.getElementById('itemSearch').value.toLowerCase();
             const hideDone = document.getElementById('itemHideCompletedCb').checked;
             const clearBtn = document.getElementById('clearBtnItems');
+            
             // Show the "X" button only if there is text in the search box
             if(clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
 
@@ -836,7 +864,7 @@
         
         const penCategoryMap = { 'penalty-generics': [], 'penalty-threats': [] };
         const penCaps = {};
-
+        
         // Hardcoded custom names for specific penalties where the generic regex spacing fails
         const penNameOverrides = {
             "Balloons4Sale": "Balloons 4 Sale",
@@ -846,7 +874,7 @@
             "JordiDoorCamper": "Jordi \"Door Camper\"",
             "CutTheStrings": "Cut the Strings"
         };
-
+        
         // Builds the Penalty grid
         function renderPenaltyCategories() {
             const data = JSON.parse(document.getElementById('penalty-data').textContent);
@@ -855,7 +883,7 @@
             // Since the JSON doesn't separate generic vs threat, we dynamically split them based on an index.
             // The first 7 entries are considered "Generic", the rest are "Threats".
             const splitIndex = 7;
-
+            
             keys.forEach((itemId, index) => {
                 const item = data[itemId];
                 const containerId = index < splitIndex ? 'penalty-generics' : 'penalty-threats';
@@ -889,6 +917,7 @@
 
                 const row = document.createElement("div");
                 row.className = `row ${isDone}`;
+                
                 // Apply 'excluded' styling (greyscale, unclickable) if this is heatstroke and it's disabled
                 if (itemId === 'Heatstroke' && heatstrokeExcluded) {
                     row.classList.add('excluded');
@@ -934,7 +963,8 @@
                 const counter = document.getElementById('HeatstrokeCounter');
                 const bar = document.getElementById('HeatstrokeBar');
                 const itemCap = penCaps['Heatstroke'] || 1;
-                const realCount = penCounts['Heatstroke'] || 0; // Retrieve the real saved state
+                const realCount = penCounts['Heatstroke'] || 0;
+                // Retrieve the real saved state
 
                 if (heatstrokeExcluded) {
                     // Visually disable it
@@ -1048,8 +1078,18 @@
             }
         }
 
+        // Empty the search input, trigger visual flash, and re-filter for penalties
         function clearPenaltySearch() {
             const searchInput = document.getElementById('penSearch');
+            
+            // Reset and trigger the flash animation
+            searchInput.classList.remove('flash');
+            void searchInput.offsetWidth; // Trigger reflow to restart animation
+            searchInput.classList.add('flash');
+            
+            // Clean up the animation class after it finishes (500ms)
+            setTimeout(() => searchInput.classList.remove('flash'), 500);
+
             searchInput.value = '';
             filterPenalties();
             searchInput.focus();
@@ -1060,11 +1100,11 @@
             const hideDone = document.getElementById('penHideCompletedCb').checked;
             const clearBtn = document.getElementById('clearBtnPenalties');
             if (clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
-
+            
             localStorage.setItem("penaltyTrackerHideCompleted", JSON.stringify(hideDone));
             const wrapper = document.getElementById('penHideCompletedWrapper');
             if(wrapper) hideDone ? wrapper.classList.add('active') : wrapper.classList.remove('active');
-
+            
             document.querySelectorAll('#tab-penalties .row').forEach(row => {
                 const name = row.querySelector('.item-name').textContent.toLowerCase();
                 let isDone = row.classList.contains('done');
@@ -1074,7 +1114,7 @@
                 const shouldBeVisible = name.includes(query) && (!hideDone || !isDone);
                 row.style.display = shouldBeVisible ? 'flex' : 'none';
             });
-
+            
             ['penalty-generics', 'penalty-threats'].forEach(id => {
                 const section = document.getElementById(`section-${id}`);
                 if (!penActiveCats[id]) return; 
@@ -1083,9 +1123,11 @@
             });
         }
 
-        // Logic for updating penalty counts. Prevents action entirely if heatstroke is currently excluded.
+        // Logic for updating penalty counts.
+        // Prevents action entirely if heatstroke is currently excluded.
         function updatePen(delta, cap, itemId, event) {
             if (event) event.stopPropagation();
+            
             // Block interaction for excluded heatstroke
             if (itemId === 'Heatstroke' && heatstrokeExcluded) return;
             
@@ -1162,7 +1204,7 @@
                     if (btn) btn.textContent = 'Expand';
                 }
             });
-
+            
             // Perform initial filtering and math calculations for Items
             applyItemVisibilityStates();
             updateItemStats();
