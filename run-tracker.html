@@ -110,9 +110,11 @@
         
         /* Search input styling */
         .search-input {
-            width: 100%; padding: 14px 45px 14px 18px; background: var(--card-bg);
+            width: 100%;
+            padding: 14px 45px 14px 18px; background: var(--card-bg);
             border: 1px solid var(--border); border-radius: 10px; color: var(--text-main);
-            font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
+            font-size: 1rem; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
         }
         .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2); }
         
@@ -127,7 +129,8 @@
 
         /* Button to clear the search input */
         .clear-search {
-            position: absolute; right: 15px; background: none; border: none; color: var(--text-muted);
+            position: absolute;
+            right: 15px; background: none; border: none; color: var(--text-muted);
             font-size: 1.2rem; cursor: pointer; display: none; padding: 0; width: auto; height: auto;
         }
 
@@ -136,9 +139,11 @@
         
         /* Interactive pill buttons for filtering categories */
         .filter-pill {
-            padding: 8px 16px; background: var(--card-bg); border: 1px solid var(--border);
+            padding: 8px 16px;
+            background: var(--card-bg); border: 1px solid var(--border);
             border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
-            cursor: pointer; transition: all 0.2s; user-select: none; display: flex; gap: 6px;
+            cursor: pointer; transition: all 0.2s;
+            user-select: none; display: flex; gap: 6px;
         }
         /* Muted text for the "(X left)" counter inside pills */
         .filter-pill .remaining-count { opacity: 0.6; font-weight: 400; }
@@ -220,13 +225,10 @@
 
         /* Styling for excluded items (specifically the Heatstroke penalty when toggled off) */
         .row.excluded {
-            opacity: 0.4;
-            filter: grayscale(100%);
+            opacity: 0.4; filter: grayscale(100%);
             box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0,0,0,0.2) !important;
-            border-color: #444 !important;
-            pointer-events: none; /* Prevent clicking while excluded */
-            background-color: #1a1a1a !important;
-            animation: none !important;
+            border-color: #444 !important; pointer-events: none; /* Prevent clicking while excluded */
+            background-color: #1a1a1a !important; animation: none !important;
         }
         
         .row.excluded .item-name { color: #777 !important; }
@@ -271,7 +273,8 @@
         /* Increment/Decrement buttons */
         button.btn-ctrl {
             background-color: #2a2a2a; border: 1px solid #444; color: var(--text-main); border-radius: 4px;
-            width: 28px; height: 28px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+            width: 28px; height: 28px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: background 0.2s;
         }
         button.btn-ctrl:hover { background-color: #3a3a3a; }
         /* The textual counter (e.g. "1 / 3") */
@@ -303,13 +306,69 @@
 
     </style>
 
-    <script id="item-generic-data" type="application/json">{"BloxyCola":{"image":"https://static.wikitide.net/onemorenightwiki/f/fb/BloxyCola.webp","weight":110,"cap":4},"PowerSavingMode":{"image":"https://static.wikitide.net/onemorenightwiki/1/1c/PowerSavingMode.webp","weight":"???","cap":2},"TarotCloth":{"image":"https://static.wikitide.net/onemorenightwiki/7/7b/TarotCloth.webp","weight":"???","cap":1},"TarotDeck":{"image":"https://static.wikitide.net/onemorenightwiki/d/d3/TarotDeck2.jpg","weight":10,"cap":2},"IncreasedPower":{"image":"https://static.wikitide.net/onemorenightwiki/4/45/IncreasedPower.webp","weight":80,"cap":7},"QuicklyOut":{"image":"https://static.wikitide.net/onemorenightwiki/b/b2/QuicklyOut.webp","weight":50,"cap":3},"BetterFlashlights":{"image":"https://static.wikitide.net/onemorenightwiki/d/db/BetterFlashlight.webp","weight":90,"cap":3},"MoreOptions":{"image":"https://static.wikitide.net/onemorenightwiki/9/99/MoreOptions.webp","weight":90,"cap":2},"Dumbell":{"image":"https://static.wikitide.net/onemorenightwiki/0/02/Dumbell.webp","weight":75,"cap":3},"GlassPillar":{"image":"https://static.wikitide.net/onemorenightwiki/a/a9/GlassPillar.webp","weight":75,"cap":1},"PolishedGenerator":{"image":"https://static.wikitide.net/onemorenightwiki/8/80/PolishedGenerator.webp","weight":"???","cap":3},"TurboMode":{"image":"https://static.wikitide.net/onemorenightwiki/2/23/TurboMode.webp","weight":20,"cap":1},"RiggingKit":{"image":"https://static.wikitide.net/onemorenightwiki/a/a1/RiggingKit.jpg","weight":45,"cap":1},"BrokenStopwatch":{"image":"https://static.wikitide.net/onemorenightwiki/b/b4/BrokenStopwatch.webp","weight":15,"cap":1},"SupplyAndDemand":{"image":"https://static.wikitide.net/onemorenightwiki/c/c0/SupplyAndDemand.jpg","weight":10,"cap":1},"BrokenDeal":{"image":"https://static.wikitide.net/onemorenightwiki/5/53/BrokenDeal.jpg","weight":25,"cap":1},"FlowerPot":{"image":"https://static.wikitide.net/onemorenightwiki/6/68/FlowerPot.jpg","weight":15,"cap":1},"ToughAsNails":{"image":"https://static.wikitide.net/onemorenightwiki/2/29/ToughAsNails.jpg","weight":20,"cap":1},"GlitchedCard":{"image":"https://static.wikitide.net/onemorenightwiki/d/de/GlitchedCard2.jpg","weight":3,"cap":1},"PhotoAlbum":{"image":"https://static.wikitide.net/onemorenightwiki/4/4c/PhotoAlbum.jpg","weight":15,"cap":2},"NinjaBelt":{"image":"https://static.wikia.nocookie.net/one-more-night-official/images/5/59/NinjaBelt.png/revision/latest?cb=20251224084522","weight":20,"cap":1},"LastRobloxianStanding":{"image":"https://static.wikia.nocookie.net/one-more-night-official/images/a/a2/LRS_Upgrade.png/revision/latest?cb=20251224084447","weight":25,"cap":1}}</script>
+    <script id="item-generic-data" type="application/json">
+    {
+        "BloxyCola":{"image":"https://static.wikitide.net/onemorenightwiki/f/fb/BloxyCola.webp","weight":110,"cap":4},
+        "PowerSavingMode":{"image":"https://static.wikitide.net/onemorenightwiki/1/1c/PowerSavingMode.webp","weight":"???","cap":2},
+        "TarotCloth":{"image":"https://static.wikitide.net/onemorenightwiki/7/7b/TarotCloth.webp","weight":"???","cap":1},
+        "TarotDeck":{"image":"https://static.wikitide.net/onemorenightwiki/d/d3/TarotDeck2.jpg","weight":10,"cap":2},
+        "IncreasedPower":{"image":"https://static.wikitide.net/onemorenightwiki/4/45/IncreasedPower.webp","weight":80,"cap":7},
+        "QuicklyOut":{"image":"https://static.wikitide.net/onemorenightwiki/b/b2/QuicklyOut.webp","weight":50,"cap":3},
+        "BetterFlashlights":{"image":"https://static.wikitide.net/onemorenightwiki/d/db/BetterFlashlight.webp","weight":90,"cap":3},
+        "MoreOptions":{"image":"https://static.wikitide.net/onemorenightwiki/9/99/MoreOptions.webp","weight":90,"cap":2},
+        "Dumbell":{"image":"https://static.wikitide.net/onemorenightwiki/0/02/Dumbell.webp","weight":75,"cap":3},
+        "GlassPillar":{"image":"https://static.wikitide.net/onemorenightwiki/a/a9/GlassPillar.webp","weight":75,"cap":1},
+        "PolishedGenerator":{"image":"https://static.wikitide.net/onemorenightwiki/8/80/PolishedGenerator.webp","weight":"???","cap":3},
+        "TurboMode":{"image":"https://static.wikitide.net/onemorenightwiki/2/23/TurboMode.webp","weight":20,"cap":1},
+        "RiggingKit":{"image":"https://static.wikitide.net/onemorenightwiki/a/a1/RiggingKit.jpg","weight":45,"cap":1},
+        "BrokenStopwatch":{"image":"https://static.wikitide.net/onemorenightwiki/b/b4/BrokenStopwatch.webp","weight":15,"cap":1},
+        "SupplyAndDemand":{"image":"https://static.wikitide.net/onemorenightwiki/c/c0/SupplyAndDemand.jpg","weight":10,"cap":1},
+        "BrokenDeal":{"image":"https://static.wikitide.net/onemorenightwiki/5/53/BrokenDeal.jpg","weight":25,"cap":1},
+        "FlowerPot":{"image":"https://static.wikitide.net/onemorenightwiki/6/68/FlowerPot.jpg","weight":15,"cap":1},
+        "ToughAsNails":{"image":"https://static.wikitide.net/onemorenightwiki/2/29/ToughAsNails.jpg","weight":20,"cap":1},
+        "GlitchedCard":{"image":"https://static.wikitide.net/onemorenightwiki/d/de/GlitchedCard2.jpg","weight":3,"cap":1},
+        "PhotoAlbum":{"image":"https://static.wikitide.net/onemorenightwiki/4/4c/PhotoAlbum.jpg","weight":15,"cap":2},
+        "NinjaBelt":{"image":"https://static.wikia.nocookie.net/one-more-night-official/images/5/59/NinjaBelt.png/revision/latest?cb=20251224084522","weight":20,"cap":1},
+        "LastRobloxianStanding":{"image":"https://static.wikia.nocookie.net/one-more-night-official/images/a/a2/LRS_Upgrade.png/revision/latest?cb=20251224084447","weight":25,"cap":1}
+    }
+    </script>
     
-    <script id="item-tarot-data" type="application/json">{"0-TheFool":{"image":"https://static.wikitide.net/onemorenightwiki/c/c0/KonoCard.png","weight":15,"cap":2},"1-TheMagician":{"image":"https://static.wikitide.net/onemorenightwiki/d/d3/RoxieCard.png","weight":5,"cap":2},"3-TheEmpress":{"image":"https://static.wikitide.net/onemorenightwiki/d/d9/DestroymanCard.png","weight":2,"cap":1},"4-TheEmperor":{"image":"https://static.wikitide.net/onemorenightwiki/7/7e/MikepikeCard.png","weight":4,"cap":1},"5-TheHierophant":{"image":"https://static.wikitide.net/onemorenightwiki/0/0c/DryCard.png","weight":10,"cap":2},"6?-TheLinked":{"image":"https://static.wikitide.net/onemorenightwiki/a/ac/LinkedCard.png","weight":7,"cap":2},"7-TheChariot":{"image":"https://static.wikitide.net/onemorenightwiki/f/f9/OliCard.png","weight":3,"cap":1},"8-Strength":{"image":"https://static.wikitide.net/onemorenightwiki/7/74/StormCard.png","weight":7,"cap":1},"9-TheHermit":{"image":"https://static.wikitide.net/onemorenightwiki/9/92/IsraCard.png","weight":7,"cap":2},"10-WheelOfFortune":{"image":"https://static.wikitide.net/onemorenightwiki/6/63/WOFCard.png","weight":"13 (+40 if bought before)","cap":1},"11-Justice":{"image":"https://static.wikitide.net/onemorenightwiki/9/97/PuppetCard.png","weight":5,"cap":1},"12?-TheOneWhoDied":{"image":"https://static.wikitide.net/onemorenightwiki/b/b4/JanCard.png","weight":8,"cap":1},"13-Death":{"image":"https://static.wikitide.net/onemorenightwiki/1/1e/FranCard.png","weight":7,"cap":1},"14-Temperance":{"image":"https://static.wikitide.net/onemorenightwiki/5/51/UpliftCard.png","weight":7,"cap":1},"15-TheDevil":{"image":"https://static.wikitide.net/onemorenightwiki/5/58/RaptorCard.png","weight":10,"cap":1},"16-TheTower":{"image":"https://static.wikitide.net/onemorenightwiki/f/fd/BadCard.png","weight":10,"cap":1},"17-TheStar":{"image":"https://static.wikitide.net/onemorenightwiki/a/a7/JordiCard.png","weight":12,"cap":1},"18-TheMoon":{"image":"https://static.wikitide.net/onemorenightwiki/9/92/MangoCard.png","weight":5,"cap":1},"19-TheSun":{"image":"https://static.wikitide.net/onemorenightwiki/9/96/WormcaveCard.png","weight":9,"cap":1},"20-Judgement":{"image":"https://static.wikitide.net/onemorenightwiki/1/1f/MyselfCard.png","weight":6,"cap":1},"21-TheWorld":{"image":"https://static.wikitide.net/onemorenightwiki/2/2a/ZGuestoCard.png","weight":10,"cap":1}}</script>
+    <script id="item-tarot-data" type="application/json">
+    {
+        "0-TheFool":{"image":"https://static.wikitide.net/onemorenightwiki/c/c0/KonoCard.png","weight":15,"cap":2},
+        "1-TheMagician":{"image":"https://static.wikitide.net/onemorenightwiki/d/d3/RoxieCard.png","weight":5,"cap":2},
+        "3-TheEmpress":{"image":"https://static.wikitide.net/onemorenightwiki/d/d9/DestroymanCard.png","weight":2,"cap":1},
+        "4-TheEmperor":{"image":"https://static.wikitide.net/onemorenightwiki/7/7e/MikepikeCard.png","weight":4,"cap":1},
+        "5-TheHierophant":{"image":"https://static.wikitide.net/onemorenightwiki/0/0c/DryCard.png","weight":10,"cap":2},
+        "6?-TheLinked":{"image":"https://static.wikitide.net/onemorenightwiki/a/ac/LinkedCard.png","weight":7,"cap":2},
+        "7-TheChariot":{"image":"https://static.wikitide.net/onemorenightwiki/f/f9/OliCard.png","weight":3,"cap":1},
+        "8-Strength":{"image":"https://static.wikitide.net/onemorenightwiki/7/74/StormCard.png","weight":7,"cap":1},
+        "9-TheHermit":{"image":"https://static.wikitide.net/onemorenightwiki/9/92/IsraCard.png","weight":7,"cap":2},
+        "10-WheelOfFortune":{"image":"https://static.wikitide.net/onemorenightwiki/6/63/WOFCard.png","weight":"13 (+40 if bought before)","cap":1},
+        "11-Justice":{"image":"https://static.wikitide.net/onemorenightwiki/9/97/PuppetCard.png","weight":5,"cap":1},
+        "12?-TheOneWhoDied":{"image":"https://static.wikitide.net/onemorenightwiki/b/b4/JanCard.png","weight":8,"cap":1},
+        "13-Death":{"image":"https://static.wikitide.net/onemorenightwiki/1/1e/FranCard.png","weight":7,"cap":1},
+        "14-Temperance":{"image":"https://static.wikitide.net/onemorenightwiki/5/51/UpliftCard.png","weight":7,"cap":1},
+        "15-TheDevil":{"image":"https://static.wikitide.net/onemorenightwiki/5/58/RaptorCard.png","weight":10,"cap":1},
+        "16-TheTower":{"image":"https://static.wikitide.net/onemorenightwiki/f/fd/BadCard.png","weight":10,"cap":1},
+        "17-TheStar":{"image":"https://static.wikitide.net/onemorenightwiki/a/a7/JordiCard.png","weight":12,"cap":1},
+        "18-TheMoon":{"image":"https://static.wikitide.net/onemorenightwiki/9/92/MangoCard.png","weight":5,"cap":1},
+        "19-TheSun":{"image":"https://static.wikitide.net/onemorenightwiki/9/96/WormcaveCard.png","weight":9,"cap":1},
+        "20-Judgement":{"image":"https://static.wikitide.net/onemorenightwiki/1/1f/MyselfCard.png","weight":6,"cap":1},
+        "21-TheWorld":{"image":"https://static.wikitide.net/onemorenightwiki/2/2a/ZGuestoCard.png","weight":10,"cap":1}
+    }
+    </script>
     
-    <script id="item-wof-data" type="application/json">{"WOFBloxyCola":{"image":"","chance":"5%","cap":4},"WOFBloxiade":{"image":"","chance":"5%","cap":4},"WOFCoffee":{"image":"","chance":"5%","cap":4},"WOFExtraPower":{"image":"","chance":"10%","cap":7}}</script>
+    <script id="item-wof-data" type="application/json">
+    {
+        "WOFBloxyCola":{"image":"","chance":"5%","cap":4},
+        "WOFBloxiade":{"image":"","chance":"5%","cap":4},
+        "WOFCoffee":{"image":"","chance":"5%","cap":4},
+        "WOFExtraPower":{"image":"","chance":"10%","cap":7}
+    }
+    </script>
 
-    <script id="penalty-data" type="application/json">
+    <script id="penalty-generic-data" type="application/json">
     {
         "CrossedWires":{"image":"https://static.wikitide.net/onemorenightwiki/thumb/b/ba/CrossedWires.webp/64px-CrossedWires.webp.png","cap":1},
         "NoThoughts,HeadEmpty":{"image":"https://static.wikitide.net/onemorenightwiki/thumb/0/09/NoThoughtsHeadEmpty.png/64px-NoThoughtsHeadEmpty.png","cap":1},
@@ -317,7 +376,12 @@
         "SavoryRing":{"image":"https://static.wikitide.net/onemorenightwiki/thumb/b/b6/SavoryRing.png/64px-SavoryRing.png","cap":1},
         "Claustrophobia":{"image":"https://static.wikitide.net/onemorenightwiki/thumb/f/fa/Claustrophobia.webp/64px-Claustrophobia.webp.png","cap":2},
         "BurntBatteries":{"image":"https://static.wikitide.net/onemorenightwiki/thumb/2/2e/BurntBatteries.webp/64px-BurntBatteries.webp.png","cap":2},
-        "Overtime":{"image":"https://static.wikitide.net/onemorenightwiki/thumb/d/d5/Overtime.webp/64px-Overtime.webp.png","cap":3},
+        "Overtime":{"image":"https://static.wikitide.net/onemorenightwiki/thumb/d/d5/Overtime.webp/64px-Overtime.webp.png","cap":3}
+    }
+    </script>
+
+    <script id="penalty-threat-data" type="application/json">
+    {
         "Balloons4Sale":{"image":"https://static.wikitide.net/onemorenightwiki/e/e5/BalloonChildrenIcon.png","cap":1},
         "SmartestBadPlay":{"image":"https://static.wikitide.net/onemorenightwiki/b/bd/Bad%27sIcon.png","cap":1},
         "Boulder":{"image":"https://static.wikitide.net/onemorenightwiki/5/51/Ball%27sIcon.png","cap":1},
@@ -574,7 +638,7 @@
         
         // Maps container IDs to the list of item IDs they hold
         const itemCategoryMap = { 'item-generics': [], 'item-tarots': [], 'item-wofs': [] };
-        
+
         // Quick lookup dictionary for each item's maximum cap
         const itemCaps = {};
 
@@ -599,25 +663,25 @@
                 // Complex string formatting logic to prettify camelCase JSON keys
                 // E.g., "IncreasedPower" -> "Increased Power"
                 let displayName = itemId.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
-                
+
                 // Remove the "WOF " prefix if it exists
                 if (displayName.startsWith("WOF ")) displayName = displayName.replace("WOF ", "");
-                
+
                 // Replace numbers with Roman Numerals (e.g., "0-TheFool" -> "0-The Fool", wait, 0 stays 0 because of romanMap index 0)
                 displayName = displayName.replace(/^(\d+)/, (match) => romanMap[parseInt(match, 10)] || match);
-                
+
                 // Clean up spacing around hyphens
                 displayName = displayName.replace(/\s*-\s*/, ' - ').trim();
-                
+
                 // Lowercase specific small words for grammatical correctness
                 displayName = displayName.replace(/\b(And|As|Of|The|Who|Died)\b/g, (m) => m.toLowerCase());
-                
+
                 // Ensure the very first letter is uppercase
                 displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-                
+
                 // Ensure letters directly after a hyphen are uppercase
                 displayName = displayName.replace(/-\s*([a-z])/, (m, p1) => '- ' + p1.toUpperCase());
-                
+
                 // Determine whether to display a "Chance" stat or a "Weight" stat
                 const statLabel = item.chance !== undefined ? `Chance: ${item.chance}` : `Weight: ${item.weight}`;
                 
@@ -690,15 +754,16 @@
         // Recalculates and updates all math relating to percentages and totals (global and per-category)
         function updateItemStats() {
             let totalPossibleAll = 0, currentAll = 0;
-            
+
             // Iterate over every category to calculate section-level stats
             for (const [catId, itemIds] of Object.entries(itemCategoryMap)) {
                 let catPossible = 0, catCurrent = 0;
                 itemIds.forEach(id => { catPossible += (itemCaps[id] || 0); catCurrent += (itemCounts[id] || 0); });
                 totalPossibleAll += catPossible; currentAll += catCurrent;
-                
+
                 const catPercent = catPossible > 0 ? Math.round((catCurrent / catPossible) * 100) : 0;
                 const catRemaining = catPossible - catCurrent;
+
                 const pill = document.getElementById(`filter-${catId}`);
                 const header = document.querySelector(`#section-${catId} .section-header`);
                 
@@ -730,7 +795,7 @@
             const totalPercent = totalPossibleAll > 0 ? Math.round((currentAll / totalPossibleAll) * 100) : 0;
             const compText = document.getElementById('itemCompletionText');
             const mainFill = document.getElementById('itemProgressFill');
-            
+
             if(compText) compText.textContent = `${currentAll} / ${totalPossibleAll} items (${totalPercent}%)`;
             if(mainFill) {
                 mainFill.style.width = totalPercent + '%';
@@ -741,15 +806,15 @@
         // Empty the search input, trigger visual flash, and re-filter
         function clearItemSearch() {
             const searchInput = document.getElementById('itemSearch');
-            
+
             // Reset and trigger the flash animation
             searchInput.classList.remove('flash');
             void searchInput.offsetWidth; // Trigger reflow to restart animation
             searchInput.classList.add('flash');
-            
+
             // Clean up the animation class after it finishes (500ms)
             setTimeout(() => searchInput.classList.remove('flash'), 500);
-            
+
             searchInput.value = '';
             filterItems();
             searchInput.focus();
@@ -783,6 +848,7 @@
                 const section = document.getElementById(`section-${id}`);
                 if (!itemActiveCats[id]) return; // Skip if category is toggled off globally
                 const visibleRows = document.getElementById(id).querySelectorAll(`.row[style="display: flex;"], .row:not([style])`);
+                
                 if(section) section.style.display = visibleRows.length > 0 ? 'block' : 'none';
                 
                 // If a user searches, automatically expand collapsed sections so they can see results
@@ -799,20 +865,20 @@
         function updateItem(delta, cap, itemId, event) {
             // Stop click event from bubbling up (crucial when clicking the - button inside the row)
             if (event) event.stopPropagation();
-            
+
             // Calculate new count, clamping it between 0 and the item's max cap
             itemCounts[itemId] = Math.min(cap, Math.max(0, (itemCounts[itemId] || 0) + delta));
-            
+
             // Grab necessary DOM elements for this specific item
             const rowElement = document.getElementById(`row-${itemId}`);
             const percent = (itemCounts[itemId] / cap) * 100;
             const safeId = escapeId(itemId);
             const counter = document.getElementById(`${safeId}Counter`);
             const bar = document.getElementById(`${safeId}Bar`);
-            
+
             // Update the counter text (e.g., 2 / 3)
             if(counter) counter.textContent = itemCounts[itemId];
-            
+
             // Update the small progress bar at the bottom of the card
             if(bar) {
                 bar.style.width = percent + '%';
@@ -842,7 +908,7 @@
                 
                 if(counter) counter.textContent = 0;
                 if(bar) { 
-                    bar.style.width = '0%'; 
+                    bar.style.width = '0%';
                     bar.style.backgroundColor = getProgressColor(0); 
                     bar.classList.remove("sparkle");
                 }
@@ -865,7 +931,7 @@
         
         const penCategoryMap = { 'penalty-generics': [], 'penalty-threats': [] };
         const penCaps = {};
-        
+
         // Hardcoded custom names for specific penalties where the generic regex spacing fails
         const penNameOverrides = {
             "Balloons4Sale": "Balloons 4 Sale",
@@ -875,21 +941,13 @@
             "JordiDoorCamper": "Jordi \"Door Camper\"",
             "CutTheStrings": "Cut the Strings"
         };
-        
-        // Builds the Penalty grid
-        function renderPenaltyCategories() {
-            const data = JSON.parse(document.getElementById('penalty-data').textContent);
-            const keys = Object.keys(data);
+
+        // Builds the Penalty grid using our refactored method
+        function renderPenaltyCategory(scriptId, containerId) {
+            const data = JSON.parse(document.getElementById(scriptId).textContent);
+            const container = document.getElementById(containerId);
             
-            // Since the JSON doesn't separate generic vs threat, we dynamically split them based on an index.
-            // The first 7 entries are considered "Generic", the rest are "Threats".
-            const splitIndex = 7;
-            
-            keys.forEach((itemId, index) => {
-                const item = data[itemId];
-                const containerId = index < splitIndex ? 'penalty-generics' : 'penalty-threats';
-                const container = document.getElementById(containerId);
-                
+            for (const [itemId, item] of Object.entries(data)) {
                 penCounts[itemId] = Math.min(item.cap, penCounts[itemId] || 0);
                 penCaps[itemId] = item.cap;
                 penCategoryMap[containerId].push(itemId);
@@ -904,7 +962,7 @@
                 let percent = (displayCount / item.cap) * 100;
                 let isDone = displayCount === item.cap ? "done" : "";
                 let sparkleClass = displayCount === item.cap ? "sparkle" : "";
-                
+
                 // If Heatstroke is excluded, artificially set its display values to 0 without deleting its saved data
                 if (itemId === 'Heatstroke' && heatstrokeExcluded) {
                     displayCount = 0;
@@ -923,6 +981,7 @@
                 if (itemId === 'Heatstroke' && heatstrokeExcluded) {
                     row.classList.add('excluded');
                 }
+                
                 row.id = `row-${itemId}`;
                 row.setAttribute('data-id', safeId); 
                 row.setAttribute('onclick', `updatePen(1, ${item.cap}, this.getAttribute('data-id'), event)`);
@@ -947,7 +1006,7 @@
                     </div>
                 `;
                 container.appendChild(row);
-            });
+            }
         }
 
         // Logic for checking/unchecking the "Exclude Heatstroke" feature
@@ -965,8 +1024,8 @@
                 const bar = document.getElementById('HeatstrokeBar');
                 const itemCap = penCaps['Heatstroke'] || 1;
                 const realCount = penCounts['Heatstroke'] || 0;
-                // Retrieve the real saved state
 
+                // Retrieve the real saved state
                 if (heatstrokeExcluded) {
                     // Visually disable it
                     hsRow.classList.add('excluded');
@@ -1027,8 +1086,10 @@
         // Recalculates penalty math. Special case handling included for Heatstroke exclusion.
         function updatePenaltyStats() {
             let totalPossibleAll = 0, currentAll = 0;
+
             for (const [catId, itemIds] of Object.entries(penCategoryMap)) {
                 let catPossible = 0, catCurrent = 0;
+                
                 itemIds.forEach(id => { 
                     let cap = penCaps[id] || 0;
                     catPossible += cap;
@@ -1040,6 +1101,7 @@
                         catCurrent += (penCounts[id] || 0); 
                     }
                 });
+                
                 totalPossibleAll += catPossible; currentAll += catCurrent;
                 
                 const catPercent = catPossible > 0 ? Math.round((catCurrent / catPossible) * 100) : 0;
@@ -1068,6 +1130,7 @@
                     fillElem.style.backgroundColor = getPenaltyProgressColor(catPercent);
                 }
             }
+            
             const totalPercent = totalPossibleAll > 0 ? Math.round((currentAll / totalPossibleAll) * 100) : 0;
             const compText = document.getElementById('penCompletionText');
             const mainFill = document.getElementById('penProgressFill');
@@ -1082,12 +1145,12 @@
         // Empty the search input, trigger visual flash, and re-filter for penalties
         function clearPenaltySearch() {
             const searchInput = document.getElementById('penSearch');
-            
+
             // Reset and trigger the flash animation
             searchInput.classList.remove('flash');
             void searchInput.offsetWidth; // Trigger reflow to restart animation
             searchInput.classList.add('flash');
-            
+
             // Clean up the animation class after it finishes (500ms)
             setTimeout(() => searchInput.classList.remove('flash'), 500);
 
@@ -1100,12 +1163,13 @@
             const query = document.getElementById('penSearch').value.toLowerCase();
             const hideDone = document.getElementById('penHideCompletedCb').checked;
             const clearBtn = document.getElementById('clearBtnPenalties');
+            
             if (clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
             
             localStorage.setItem("penaltyTrackerHideCompleted", JSON.stringify(hideDone));
             const wrapper = document.getElementById('penHideCompletedWrapper');
             if(wrapper) hideDone ? wrapper.classList.add('active') : wrapper.classList.remove('active');
-            
+
             document.querySelectorAll('#tab-penalties .row').forEach(row => {
                 const name = row.querySelector('.item-name').textContent.toLowerCase();
                 let isDone = row.classList.contains('done');
@@ -1166,7 +1230,7 @@
                 if (itemId !== 'Heatstroke' || !heatstrokeExcluded) {
                     if (counter) counter.textContent = 0;
                     if (bar) { 
-                        bar.style.width = '0%'; 
+                        bar.style.width = '0%';
                         bar.style.backgroundColor = getPenaltyProgressColor(0);
                         bar.classList.remove("sparkle");
                     }
@@ -1211,7 +1275,8 @@
             updateItemStats();
 
             // Parse JSON and build UI grid for penalties
-            renderPenaltyCategories();
+            renderPenaltyCategory("penalty-generic-data", "penalty-generics");
+            renderPenaltyCategory("penalty-threat-data", "penalty-threats");
             
             // Restore 'Hide Completed' state for penalties
             const penCb = document.getElementById('penHideCompletedCb');
@@ -1236,7 +1301,7 @@
                     if (btn) btn.textContent = 'Expand';
                 }
             });
-
+            
             // Perform initial filtering and math calculations for Penalties
             applyPenaltyVisibilityStates();
             updatePenaltyStats();
