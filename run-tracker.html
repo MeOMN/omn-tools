@@ -306,12 +306,6 @@
         .reset-btn:hover { background-color: var(--danger-hover); }
 
     </style>
-
-    <script src="item-generic-data.js"></script>
-    <script src="item-tarot-data.js"></script>
-    <script src="item-wof-data.js"></script>
-    <script src="penalty-generic-data.js"></script>
-    <script src="penalty-threat-data.js"></script>
 </head>
 <body>
 
@@ -520,11 +514,11 @@
         // Quick lookup dictionary for each item's maximum cap
         const itemCaps = {};
 
-        // Reads the directly injected JS variables, formats strings, and dynamically builds HTML elements
+        // Reads fetched JSON data, formats strings, and dynamically builds HTML elements
         function renderItemCategory(data, containerId) {
             const container = document.getElementById(containerId);
 
-            // Iterate through each item defined in the linked JS object
+            // Iterate through each item defined in the provided data object
             for (const [itemId, item] of Object.entries(data)) {
                 // Ensure the saved count doesn't exceed the newly loaded cap
                 itemCounts[itemId] = Math.min(item.cap, itemCounts[itemId] || 0);
@@ -819,7 +813,7 @@
             "CutTheStrings": "Cut the Strings"
         };
 
-        // Builds the Penalty grid using our refactored method linking directly to JS variables
+        // Builds the Penalty grid using the fetched JSON data
         function renderPenaltyCategory(data, containerId) {
             const container = document.getElementById(containerId);
             
@@ -1118,69 +1112,91 @@
             updatePenaltyStats();
         }
 
+        // Helper function to fetch JSON files asynchronously
+        async function fetchJsonData(url) {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Could not load ${url}`);
+            return await response.json();
+        }
+
         // INITIALIZATION SCRIPT - Runs when the DOM is fully loaded
-        window.onload = () => {
+        window.onload = async () => {
             // Restore last active tab
             const savedTab = localStorage.getItem('runTrackerActiveTab') || 'items';
             switchTab(savedTab);
 
-            // Pass the javascript variables directly into the render function
-            renderItemCategory(itemGenericData, "item-generics");
-            renderItemCategory(itemTarotData, "item-tarots");
-            renderItemCategory(itemWofData, "item-wofs");
-            
-            // Restore 'Hide Completed' state for items
-            const itemCb = document.getElementById('itemHideCompletedCb');
-            if(itemCb) {
-                itemCb.checked = itemHideCompleted;
-                if(itemHideCompleted) document.getElementById('itemHideCompletedWrapper').classList.add('active');
-            }
+            try {
+                // Fetch all JSON files simultaneously to speed up loading
+                const [itemGenericData, itemTarotData, itemWofData, penaltyGenericData, penaltyThreatData] = await Promise.all([
+                    fetchJsonData('item-generic-data.json'),
+                    fetchJsonData('item-tarot-data.json'),
+                    fetchJsonData('item-wof-data.json'),
+                    fetchJsonData('penalty-generic-data.json'),
+                    fetchJsonData('penalty-threat-data.json')
+                ]);
 
-            // Restore collapsed state for item sections
-            ['item-generics', 'item-tarots', 'item-wofs'].forEach(id => {
-                if (itemCollapsedStates[id]) {
-                    const container = document.getElementById(id);
-                    const btn = document.getElementById('btn-' + id);
-                    if (container) container.classList.add('collapsed');
-                    if (btn) btn.textContent = 'Expand';
+                // Render Items using the fetched data
+                renderItemCategory(itemGenericData, "item-generics");
+                renderItemCategory(itemTarotData, "item-tarots");
+                renderItemCategory(itemWofData, "item-wofs");
+                
+                // Restore 'Hide Completed' state for items
+                const itemCb = document.getElementById('itemHideCompletedCb');
+                if(itemCb) {
+                    itemCb.checked = itemHideCompleted;
+                    if(itemHideCompleted) document.getElementById('itemHideCompletedWrapper').classList.add('active');
                 }
-            });
-            
-            // Perform initial filtering and math calculations for Items
-            applyItemVisibilityStates();
-            updateItemStats();
 
-            // Pass the javascript variables directly into the render function for penalties
-            renderPenaltyCategory(penaltyGenericData, "penalty-generics");
-            renderPenaltyCategory(penaltyThreatData, "penalty-threats");
-            
-            // Restore 'Hide Completed' state for penalties
-            const penCb = document.getElementById('penHideCompletedCb');
-            if(penCb) {
-                penCb.checked = penHideCompleted;
-                if(penHideCompleted) document.getElementById('penHideCompletedWrapper').classList.add('active');
-            }
-            
-            // Restore 'Exclude Heatstroke' state
-            const hsCb = document.getElementById('excludeHeatstrokeCb');
-            if(hsCb) {
-                hsCb.checked = heatstrokeExcluded;
-                if(heatstrokeExcluded) document.getElementById('excludeHeatstrokeWrapper').classList.add('active');
-            }
-            
-            // Restore collapsed state for penalty sections
-            ['penalty-generics', 'penalty-threats'].forEach(id => {
-                if (penCollapsedStates[id]) {
-                    const container = document.getElementById(id);
-                    const btn = document.getElementById('btn-' + id);
-                    if (container) container.classList.add('collapsed');
-                    if (btn) btn.textContent = 'Expand';
+                // Restore collapsed state for item sections
+                ['item-generics', 'item-tarots', 'item-wofs'].forEach(id => {
+                    if (itemCollapsedStates[id]) {
+                        const container = document.getElementById(id);
+                        const btn = document.getElementById('btn-' + id);
+                        if (container) container.classList.add('collapsed');
+                        if (btn) btn.textContent = 'Expand';
+                    }
+                });
+                
+                // Perform initial filtering and math calculations for Items
+                applyItemVisibilityStates();
+                updateItemStats();
+
+                // Render Penalties using the fetched data
+                renderPenaltyCategory(penaltyGenericData, "penalty-generics");
+                renderPenaltyCategory(penaltyThreatData, "penalty-threats");
+                
+                // Restore 'Hide Completed' state for penalties
+                const penCb = document.getElementById('penHideCompletedCb');
+                if(penCb) {
+                    penCb.checked = penHideCompleted;
+                    if(penHideCompleted) document.getElementById('penHideCompletedWrapper').classList.add('active');
                 }
-            });
-            
-            // Perform initial filtering and math calculations for Penalties
-            applyPenaltyVisibilityStates();
-            updatePenaltyStats();
+                
+                // Restore 'Exclude Heatstroke' state
+                const hsCb = document.getElementById('excludeHeatstrokeCb');
+                if(hsCb) {
+                    hsCb.checked = heatstrokeExcluded;
+                    if(heatstrokeExcluded) document.getElementById('excludeHeatstrokeWrapper').classList.add('active');
+                }
+                
+                // Restore collapsed state for penalty sections
+                ['penalty-generics', 'penalty-threats'].forEach(id => {
+                    if (penCollapsedStates[id]) {
+                        const container = document.getElementById(id);
+                        const btn = document.getElementById('btn-' + id);
+                        if (container) container.classList.add('collapsed');
+                        if (btn) btn.textContent = 'Expand';
+                    }
+                });
+                
+                // Perform initial filtering and math calculations for Penalties
+                applyPenaltyVisibilityStates();
+                updatePenaltyStats();
+
+            } catch (error) {
+                console.error("Data loading failed:", error);
+                alert("Failed to load JSON files. Are you running a local server to bypass CORS restrictions?");
+            }
         };
     </script>
 </body>
