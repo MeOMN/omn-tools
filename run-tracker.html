@@ -9,7 +9,7 @@
     <style>
         /* Define global CSS variables for easy theming and consistent colors */
         :root {
-            color-scheme: dark !important; /* Force dark mode scrollbars and browser UI */
+            color-scheme: dark !important;
             --bg-color: #121212;
             --card-bg: #1e1e1e;
             --text-main: #e0e0e0;
@@ -20,9 +20,9 @@
             --danger-hover: #b71c1c;
             --progress-bg: #333;
             --gold: #ffd700; /* Gold for Tarot items */
-            --purple: #a333c8; /* Purple for WOF items */
-            --threat-color: hsl(30, 100%, 50%); /* Orange/Red for threats */
-            --generic-color: hsl(190, 100%, 50%); /* Cyan/Blue for generic penalties */
+            --purple: #a333c8;
+            --threat-color: hsl(30, 100%, 50%);
+            --generic-color: hsl(190, 100%, 50%);
         }
 
         /* Basic body reset and font setup */
@@ -44,7 +44,7 @@
             position: sticky;
             top: 0;
             background: var(--bg-color);
-            z-index: 30; /* Ensure tabs stay above content */
+            z-index: 30;
         }
 
         /* Individual tab buttons */
@@ -57,8 +57,8 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            border-bottom: 3px solid transparent; /* Hidden border for alignment */
-            margin-bottom: -2px; /* Overlap the parent's bottom border */
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
         }
 
         .tab-btn:hover {
@@ -172,7 +172,7 @@
         .filter-pill.complete#filter-penalty-generics { animation: pulseGlow 3s infinite ease-in-out; --glow-color: hsla(190, 100%, 50%, 0.4); --border-color: var(--generic-color); color: var(--generic-color) !important; background: hsla(190, 100%, 50%, 0.05) !important; }
         .filter-pill.complete#filter-penalty-threats { animation: pulseGlow 3s infinite ease-in-out; --glow-color: hsla(30, 100%, 50%, 0.4); --border-color: var(--threat-color); color: var(--threat-color) !important; background: hsla(30, 100%, 50%, 0.05) !important; }
 
-        /* Styling for utility toggles (like "Hide Completed" or "Exclude Heatstroke") */
+        /* Styling for utility toggles */
         .toggle-completed-container {
             display: flex; align-items: center; gap: 8px; background: var(--card-bg);
             padding: 0 15px; height: 46px; border-radius: 10px; border: 1px solid var(--border);
@@ -181,13 +181,77 @@
         }
         .toggle-completed-container.active { border-color: var(--accent); color: var(--text-main); }
 
+        /* Tooltip Container and Icon */
+        .tooltip-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: help;
+        }
+        
+        .info-icon {
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        
+        .tooltip-container:hover .info-icon {
+            color: var(--accent);
+        }
+
+        /* Tooltip Popup Box */
+        .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: #2a2a2a;
+            color: var(--text-main);
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px 14px;
+            position: absolute;
+            z-index: 100;
+            bottom: 150%;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            transform: translateY(5px);
+            font-size: 0.85rem;
+            font-weight: normal;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            pointer-events: none;
+            line-height: 1.4;
+        }
+
+        /* Tooltip Arrow */
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #2a2a2a transparent transparent transparent;
+        }
+
+        /* Show Tooltip on Hover */
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Highlight text inside tooltip */
+        .tooltip-text b { color: var(--accent); }
+
         /* Overall progress bar container at the top of a tab */
         .stats-bar { background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border); }
         .stats-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: bold; }
         .progress-container { width: 100%; height: 10px; background: var(--progress-bg); border-radius: 5px; overflow: hidden; }
         .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.4s ease, background-color 0.4s ease; }
 
-        /* Headers for individual categories (e.g., "Generic Items", "Tarot Cards") */
+        /* Headers for individual categories */
         .section-header {
             display: flex; align-items: center; border-bottom: 2px solid var(--border);
             margin-bottom: 1rem; cursor: pointer; user-select: none; gap: 20px;
@@ -213,7 +277,7 @@
 
         /* Responsive grid layout for the item/penalty cards */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; padding: 0 5px; }
-        .grid-container.collapsed { display: none !important; } /* Hide grid when section is collapsed */
+        .grid-container.collapsed { display: none !important; }
 
         /* Individual item/penalty card styling */
         .row {
@@ -224,12 +288,11 @@
         }
         .row:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
 
-        /* Styling for excluded items (specifically the Heatstroke penalty when toggled off) */
+        /* Styling for excluded items */
         .row.excluded {
             opacity: 0.4; filter: grayscale(100%);
             box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0,0,0,0.2) !important;
-            border-color: #444 !important; pointer-events: none; /* Prevent clicking while excluded */
-            background-color: #1a1a1a !important; animation: none !important;
+            border-color: #444 !important; pointer-events: none; background-color: #1a1a1a !important; animation: none !important;
         }
         
         .row.excluded .item-name { color: #777 !important; }
@@ -256,51 +319,41 @@
 
         /* Text information container within the card */
         .item-info { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; justify-content: center; height: 100%; }
-        /* Item title text clamping to prevent extremely long names from breaking layout */
+        /* Item title text clamping */
         .item-name { font-weight: 600; font-size: 0.95rem; white-space: normal; word-wrap: break-word; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* Completed item text colors matching their category themes */
+        /* Completed item text colors */
         #item-generics .row.done .item-name { color: var(--accent); }
         #item-tarots .row.done .item-name { color: var(--gold); }
         #item-wofs .row.done .item-name { color: #d084e8; }
         #penalty-generics .row.done .item-name { color: var(--generic-color); }
         #penalty-threats .row.done .item-name { color: var(--threat-color); }
 
-        /* Smaller text for weight/chance info under the item name */
         .weight { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-
-        /* Plus/Minus controls layout on the right side of the card */
         .controls { display: flex; align-items: center; gap: 8px; margin-left: 10px; flex-shrink: 0; }
-        /* Increment/Decrement buttons */
         button.btn-ctrl {
             background-color: #2a2a2a; border: 1px solid #444; color: var(--text-main); border-radius: 4px;
             width: 28px; height: 28px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center;
             justify-content: center; transition: background 0.2s;
         }
         button.btn-ctrl:hover { background-color: #3a3a3a; }
-        /* The textual counter (e.g. "1 / 3") */
         .counter-text { font-weight: bold; min-width: 35px; text-align: center; font-variant-numeric: tabular-nums; font-size: 0.9rem; }
 
-        /* Checkmark indicating completion, hidden by default */
         .checkmark { visibility: hidden; opacity: 0; font-weight: bold; font-size: 1.1rem; margin-left: 2px; width: 18px; text-align: center; transition: opacity 0.3s ease, visibility 0.3s ease; }
         .row.done .checkmark { visibility: visible; opacity: 1; }
         
-        /* Colored checkmarks based on category */
         #item-generics .row.done .checkmark { color: var(--accent); }
         #item-tarots .row.done .checkmark { color: var(--gold); }
         #item-wofs .row.done .checkmark { color: var(--purple); }
         #penalty-generics .row.done .checkmark { color: var(--generic-color); }
         #penalty-threats .row.done .checkmark { color: var(--threat-color); }
 
-        /* Progress bar located at the bottom of each individual card */
         .item-bar-container { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-top: 4px; flex-shrink: 0; position: relative; }
         .item-bar-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease, background-color 0.3s ease; position: relative; overflow: hidden; }
 
-        /* Sparkle animation for completed progress bars */
         @keyframes barSparkle { 0% { left: -100%; } 100% { left: 200%; } }
         .item-bar-fill.sparkle::after { content: ''; position: absolute; top: 0; left: -100%; width: 80px; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent); animation: barSparkle 2.5s infinite linear; }
 
-        /* Container and styling for the dangerous reset buttons at the bottom */
         .reset-section { display: flex; justify-content: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
         .reset-btn { background-color: var(--danger); color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 1rem; font-weight: bold; width: auto; height: auto; cursor: pointer; }
         .reset-btn:hover { background-color: var(--danger-hover); }
@@ -338,11 +391,23 @@
                     <input type="checkbox" id="itemHideCompletedCb" onchange="filterItems()" style="display:none">
                     <span>Hide Completed</span>
                 </label>
+
+                <label class="toggle-completed-container" id="enableTarotClothWrapper">
+                    <input type="checkbox" id="enableTarotClothCb" onchange="toggleTarotCloth()" style="display:none">
+                    <span>Enable Tarot Cloth</span>
+                </label>
             </div>
             
             <div class="stats-bar">
                 <div class="stats-info">
-                    <span>Completion Progress</span>
+                    <span class="tooltip-container">
+                        Completion Progress <span class="info-icon">ⓘ</span>
+                        <span class="tooltip-text">
+                            <b>Pro Tip:</b><br>
+                            • <b>Shift + Click</b> an item to instantly Max or Reset it.<br>
+                            • Clicking a Maxed item will decrease its count by 1.
+                        </span>
+                    </span>
                     <span id="itemCompletionText">0 / 0 items (0%)</span>
                 </div>
                 <div class="progress-container">
@@ -428,7 +493,14 @@
             
             <div class="stats-bar">
                 <div class="stats-info">
-                    <span>Completion Progress</span>
+                    <span class="tooltip-container">
+                        Completion Progress <span class="info-icon">ⓘ</span>
+                        <span class="tooltip-text">
+                            <b>Pro Tip:</b><br>
+                            • <b>Shift + Click</b> a penalty to instantly Max or Reset it.<br>
+                            • Clicking a Maxed penalty will decrease its count by 1.
+                        </span>
+                    </span>
                     <span id="penCompletionText">0 / 0 penalties (0%)</span>
                 </div>
                 <div class="progress-container">
@@ -471,103 +543,79 @@
     </main>
 
     <script>
-        // Simple identity function used for escaping IDs, currently just returns the string as-is
         function escapeId(id) { return id; }
         
-        // Generates an HSL color for Items: transitions from dark red (0%) to bright green (100%)
         function getProgressColor(percent) { 
             return `hsl(${(percent / 100) * 120}, 70%, 45%)`;
         }
 
-        // Generates an HSL color for Penalties: reverses the logic, starting red and transitioning differently
         function getPenaltyProgressColor(percent) {
             return `hsl(${360 - ((percent / 100) * 75)}, 70%, 45%)`;
         }
 
-        // Handles switching between Items and Penalties views
         function switchTab(tabName) {
-            // Remove active classes from all contents and tabs
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            // Apply active class to the target tab
             document.getElementById(`tab-${tabName}`).classList.add('active');
             document.querySelector(`.tab-btn[data-target="${tabName}"]`).classList.add('active');
             
-            // Save state to localStorage so it remembers where you were on reload
             localStorage.setItem('runTrackerActiveTab', tabName);
         }
 
-        // Used to map numeric values in JSON keys (like "0-TheFool") to Roman Numerals
         const romanMap = ["0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI"];
-
+        
         // --- ITEM STATE MANAGEMENT ---
-        // Retrieve saved user data from localStorage, or initialize with defaults
         const itemCounts = JSON.parse(localStorage.getItem("itemTrackerCounts")) || {};
         const itemCollapsedStates = JSON.parse(localStorage.getItem("itemTrackerCollapsed")) || {};
         const itemActiveCats = JSON.parse(localStorage.getItem("itemTrackerActiveCats")) || {'item-generics': true, 'item-tarots': true, 'item-wofs': true};
         const itemHideCompleted = JSON.parse(localStorage.getItem("itemTrackerHideCompleted")) || false;
+        let tarotClothEnabled = JSON.parse(localStorage.getItem("itemTrackerEnableTarotCloth")) || false;
         
-        // Maps container IDs to the list of item IDs they hold
         const itemCategoryMap = { 'item-generics': [], 'item-tarots': [], 'item-wofs': [] };
-
-        // Quick lookup dictionary for each item's maximum cap
         const itemCaps = {};
-
-        // Reads fetched JSON data, formats strings, and dynamically builds HTML elements
+        
         function renderItemCategory(data, containerId) {
             const container = document.getElementById(containerId);
-
-            // Iterate through each item defined in the provided data object
             for (const [itemId, item] of Object.entries(data)) {
-                // Ensure the saved count doesn't exceed the newly loaded cap
                 itemCounts[itemId] = Math.min(item.cap, itemCounts[itemId] || 0);
                 itemCaps[itemId] = item.cap;
                 itemCategoryMap[containerId].push(itemId);
 
                 const safeId = escapeId(itemId);
-                // Create the img tag if a URL is provided, otherwise leave blank
                 const imageContent = item.image 
                     ? `<img src="${item.image}" alt="icon" loading="lazy" onerror="this.src='https://via.placeholder.com/50?text=?'">` 
                     : ``;
-
-                // Complex string formatting logic to prettify camelCase JSON keys
-                // E.g., "IncreasedPower" -> "Increased Power"
+                
                 let displayName = itemId.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
-
-                // Remove the "WOF " prefix if it exists
                 if (displayName.startsWith("WOF ")) displayName = displayName.replace("WOF ", "");
-
-                // Replace numbers with Roman Numerals (e.g., "0-TheFool" -> "0-The Fool", wait, 0 stays 0 because of romanMap index 0)
                 displayName = displayName.replace(/^(\d+)/, (match) => romanMap[parseInt(match, 10)] || match);
-
-                // Clean up spacing around hyphens
                 displayName = displayName.replace(/\s*-\s*/, ' - ').trim();
-
-                // Lowercase specific small words for grammatical correctness
                 displayName = displayName.replace(/\b(And|As|Of|The|Who|Died)\b/g, (m) => m.toLowerCase());
-
-                // Ensure the very first letter is uppercase
                 displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-
-                // Ensure letters directly after a hyphen are uppercase
                 displayName = displayName.replace(/-\s*([a-z])/, (m, p1) => '- ' + p1.toUpperCase());
-
-                // Determine whether to display a "Chance" stat or a "Weight" stat
+                
                 const statLabel = item.chance !== undefined ? `Chance: ${item.chance}` : `Weight: ${item.weight}`;
                 
-                // Calculate initial styling/state for the progress bar
-                const percent = (itemCounts[itemId] / item.cap) * 100;
-                const isDone = itemCounts[itemId] === item.cap ? "done" : "";
-                const sparkleClass = itemCounts[itemId] === item.cap ? "sparkle" : "";
-                const safeTitle = displayName.replace(/"/g, '&quot;'); // Escape quotes for the hover title tooltip
+                let displayCount = itemCounts[itemId];
+                let percent = (displayCount / item.cap) * 100;
+                let isDone = displayCount === item.cap ? "done" : "";
+                let sparkleClass = displayCount === item.cap ? "sparkle" : "";
 
-                // Construct the actual DOM element
+                // Force Tarot Cloth to appear maxed if the toggle is active
+                if (itemId === 'TarotCloth' && tarotClothEnabled) {
+                    displayCount = item.cap;
+                    percent = 100;
+                    isDone = "done";
+                    sparkleClass = "sparkle";
+                }
+
+                const safeTitle = displayName.replace(/"/g, '&quot;');
+
                 const row = document.createElement("div");
                 row.className = `row ${isDone}`;
                 row.id = `row-${itemId}`;
                 row.setAttribute('data-id', safeId);
-                // Clicking anywhere on the row increments the tracker
                 row.setAttribute('onclick', `updateItem(1, ${item.cap}, this.getAttribute('data-id'), event)`);
 
                 row.innerHTML = `
@@ -579,7 +627,7 @@
                         </div>
                         <div class="controls">
                             <button class="btn-ctrl" data-id="${safeId}" onclick="updateItem(-1, ${item.cap}, this.getAttribute('data-id'), event)">-</button>
-                            <div class="counter-text"><span id="${safeId}Counter">${itemCounts[itemId]}</span> / ${item.cap}</div>
+                            <div class="counter-text"><span id="${safeId}Counter">${displayCount}</span> / ${item.cap}</div>
                             <button class="btn-ctrl" data-id="${safeId}" onclick="updateItem(1, ${item.cap}, this.getAttribute('data-id'), event)">+</button>
                             <div class="checkmark">✓</div>
                         </div>
@@ -592,25 +640,21 @@
             }
         }
 
-        // Toggles the collapse state of a specific category section (e.g. Tarot Cards)
         function toggleItemSection(containerId) {
             const container = document.getElementById(containerId);
             const btn = document.getElementById('btn-' + containerId);
             const isCollapsed = container.classList.toggle('collapsed');
             btn.textContent = isCollapsed ? 'Expand' : 'Collapse';
-            // Save preference to localStorage
             itemCollapsedStates[containerId] = isCollapsed;
             localStorage.setItem("itemTrackerCollapsed", JSON.stringify(itemCollapsedStates));
         }
 
-        // Toggles whether a category is filtered completely out of view using the top pills
         function toggleItemCategoryVisibility(id) {
             itemActiveCats[id] = !itemActiveCats[id];
             localStorage.setItem("itemTrackerActiveCats", JSON.stringify(itemActiveCats));
             applyItemVisibilityStates();
         }
 
-        // Applies the display rules based on the active category pills
         function applyItemVisibilityStates() {
             for (const [id, active] of Object.entries(itemActiveCats)) {
                 const section = document.getElementById(`section-${id}`);
@@ -618,23 +662,66 @@
                 if (section) section.style.display = active ? 'block' : 'none';
                 if (pill) active ? pill.classList.add('active') : pill.classList.remove('active');
             }
-            // Re-run search/hide filters after updating categories
+            filterItems();
+        }
+        
+        function toggleTarotCloth() {
+            tarotClothEnabled = document.getElementById('enableTarotClothCb').checked;
+            localStorage.setItem("itemTrackerEnableTarotCloth", JSON.stringify(tarotClothEnabled));
+            const wrapper = document.getElementById('enableTarotClothWrapper');
+            if (wrapper) tarotClothEnabled ? wrapper.classList.add('active') : wrapper.classList.remove('active');
+            
+            const tcRow = document.getElementById('row-TarotCloth');
+            if (tcRow) {
+                const counter = document.getElementById('TarotClothCounter');
+                const bar = document.getElementById('TarotClothBar');
+                const itemCap = itemCaps['TarotCloth'] || 1;
+                const realCount = itemCounts['TarotCloth'] || 0;
+
+                if (tarotClothEnabled) {
+                    if (counter) counter.textContent = itemCap;
+                    if (bar) {
+                        bar.style.width = '100%';
+                        bar.style.backgroundColor = getProgressColor(100);
+                        bar.classList.add('sparkle');
+                    }
+                    tcRow.classList.add('done');
+                } else {
+                    if (counter) counter.textContent = realCount;
+                    if (bar) {
+                        const percent = (realCount / itemCap) * 100;
+                        bar.style.width = percent + '%';
+                        bar.style.backgroundColor = getProgressColor(percent);
+                        if (realCount === itemCap) bar.classList.add('sparkle');
+                        else bar.classList.remove('sparkle');
+                    }
+                    if (realCount === itemCap) tcRow.classList.add('done');
+                    else tcRow.classList.remove('done');
+                }
+            }
+            updateItemStats();
             filterItems();
         }
 
-        // Recalculates and updates all math relating to percentages and totals (global and per-category)
         function updateItemStats() {
             let totalPossibleAll = 0, currentAll = 0;
-
-            // Iterate over every category to calculate section-level stats
             for (const [catId, itemIds] of Object.entries(itemCategoryMap)) {
                 let catPossible = 0, catCurrent = 0;
-                itemIds.forEach(id => { catPossible += (itemCaps[id] || 0); catCurrent += (itemCounts[id] || 0); });
+                
+                itemIds.forEach(id => { 
+                    let cap = itemCaps[id] || 0;
+                    catPossible += cap; 
+                    
+                    if (id === 'TarotCloth' && tarotClothEnabled) {
+                        catCurrent += cap; 
+                    } else {
+                        catCurrent += (itemCounts[id] || 0); 
+                    }
+                });
+                
                 totalPossibleAll += catPossible; currentAll += catCurrent;
-
                 const catPercent = catPossible > 0 ? Math.round((catCurrent / catPossible) * 100) : 0;
                 const catRemaining = catPossible - catCurrent;
-
                 const pill = document.getElementById(`filter-${catId}`);
                 const header = document.querySelector(`#section-${catId} .section-header`);
                 
@@ -644,7 +731,6 @@
                 
                 if(textElem) textElem.textContent = `${catPercent}%`;
                 
-                // If section is 100% complete, apply "MAX" text and glow animations
                 if (catRemaining === 0 && catPossible > 0) {
                     if(remElem) remElem.textContent = `(MAX)`;
                     if(pill) pill.classList.add('complete');
@@ -655,18 +741,15 @@
                     if(header) header.classList.remove(`mastery-${catId}`);
                 }
 
-                // Update category progress bar width and color
                 if(fillElem) {
                     fillElem.style.width = `${catPercent}%`;
                     fillElem.style.backgroundColor = getProgressColor(catPercent);
                 }
             }
             
-            // Update the global total text and main progress bar
             const totalPercent = totalPossibleAll > 0 ? Math.round((currentAll / totalPossibleAll) * 100) : 0;
             const compText = document.getElementById('itemCompletionText');
             const mainFill = document.getElementById('itemProgressFill');
-
             if(compText) compText.textContent = `${currentAll} / ${totalPossibleAll} items (${totalPercent}%)`;
             if(mainFill) {
                 mainFill.style.width = totalPercent + '%';
@@ -674,55 +757,45 @@
             }
         }
 
-        // Empty the search input, trigger visual flash, and re-filter
         function clearItemSearch() {
             const searchInput = document.getElementById('itemSearch');
-
-            // Reset and trigger the flash animation
             searchInput.classList.remove('flash');
-            void searchInput.offsetWidth; // Trigger reflow to restart animation
+            void searchInput.offsetWidth;
             searchInput.classList.add('flash');
-
-            // Clean up the animation class after it finishes (500ms)
             setTimeout(() => searchInput.classList.remove('flash'), 500);
-
             searchInput.value = '';
             filterItems();
             searchInput.focus();
         }
 
-        // Hides/Shows DOM rows based on the text search and the "Hide Completed" toggle
         function filterItems() {
             const query = document.getElementById('itemSearch').value.toLowerCase();
             const hideDone = document.getElementById('itemHideCompletedCb').checked;
             const clearBtn = document.getElementById('clearBtnItems');
             
-            // Show the "X" button only if there is text in the search box
             if(clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
 
-            // Persist the checkbox state
             localStorage.setItem("itemTrackerHideCompleted", JSON.stringify(hideDone));
             const wrapper = document.getElementById('itemHideCompletedWrapper');
             if(wrapper) hideDone ? wrapper.classList.add('active') : wrapper.classList.remove('active');
-
-            // Check every single row in the items tab
+            
             document.querySelectorAll('#tab-items .row').forEach(row => {
                 const name = row.querySelector('.item-name').textContent.toLowerCase();
-                const isDone = row.classList.contains('done');
-                // Logic: Show if it matches search AND (it's not done OR we aren't hiding done items)
+                let isDone = row.classList.contains('done');
+                
+                if (row.id === 'row-TarotCloth' && tarotClothEnabled) isDone = true; 
+                
                 const shouldBeVisible = name.includes(query) && (!hideDone || !isDone);
                 row.style.display = shouldBeVisible ? 'flex' : 'none';
             });
-
-            // Automatically hide entire sections if they have no visible rows matching the query
+            
             ['item-generics', 'item-tarots', 'item-wofs'].forEach(id => {
                 const section = document.getElementById(`section-${id}`);
-                if (!itemActiveCats[id]) return; // Skip if category is toggled off globally
+                if (!itemActiveCats[id]) return; 
                 const visibleRows = document.getElementById(id).querySelectorAll(`.row[style="display: flex;"], .row:not([style])`);
                 
                 if(section) section.style.display = visibleRows.length > 0 ? 'block' : 'none';
                 
-                // If a user searches, automatically expand collapsed sections so they can see results
                 if (query !== "" && visibleRows.length > 0) {
                     const container = document.getElementById(id);
                     const btn = document.getElementById('btn-' + id);
@@ -732,50 +805,58 @@
             });
         }
 
-        // The core function for adding/subtracting from an item's count
         function updateItem(delta, cap, itemId, event) {
-            // Stop click event from bubbling up (crucial when clicking the - button inside the row)
             if (event) event.stopPropagation();
 
-            // Calculate new count, clamping it between 0 and the item's max cap
-            itemCounts[itemId] = Math.min(cap, Math.max(0, (itemCounts[itemId] || 0) + delta));
+            if (typeof tarotClothEnabled !== 'undefined' && itemId === 'TarotCloth' && tarotClothEnabled) return;
 
-            // Grab necessary DOM elements for this specific item
+            let current = itemCounts[itemId] || 0;
+
+            if (event && event.shiftKey) {
+                itemCounts[itemId] = (current === cap) ? 0 : cap;
+            } 
+            else if (current === cap && delta > 0) {
+                itemCounts[itemId] = Math.max(0, current - 1);
+            } 
+            else {
+                itemCounts[itemId] = Math.min(cap, Math.max(0, current + delta));
+            }
+
             const rowElement = document.getElementById(`row-${itemId}`);
             const percent = (itemCounts[itemId] / cap) * 100;
             const safeId = escapeId(itemId);
             const counter = document.getElementById(`${safeId}Counter`);
             const bar = document.getElementById(`${safeId}Bar`);
 
-            // Update the counter text (e.g., 2 / 3)
             if(counter) counter.textContent = itemCounts[itemId];
-
-            // Update the small progress bar at the bottom of the card
+            
             if(bar) {
                 bar.style.width = percent + '%';
                 bar.style.backgroundColor = getProgressColor(percent);
-                // Add the shine animation if maxed out
                 itemCounts[itemId] === cap ? bar.classList.add("sparkle") : bar.classList.remove("sparkle");
             }
             
-            // Toggle the 'done' class on the whole row, which triggers CSS changes (glows, checkmarks)
             if(rowElement) itemCounts[itemId] === cap ? rowElement.classList.add("done") : rowElement.classList.remove("done");
             
-            // Save state immediately and re-evaluate filters/stats
             localStorage.setItem("itemTrackerCounts", JSON.stringify(itemCounts));
-            filterItems(); // Run in case "Hide Completed" is active and an item just finished
+            filterItems(); 
             updateItemStats();
         }
 
-        // Wipes all item data from localStorage and resets the DOM
         function resetAllItems() {
             if (!confirm("Reset all item progress?")) return;
+            
             for (const itemId in itemCounts) {
-                itemCounts[itemId] = 0;
+                itemCounts[itemId] = 0; 
+                
                 const row = document.getElementById(`row-${itemId}`);
                 const safeId = escapeId(itemId);
                 const bar = document.getElementById(`${safeId}Bar`);
                 const counter = document.getElementById(`${safeId}Counter`);
+                
+                if (typeof tarotClothEnabled !== 'undefined' && itemId === 'TarotCloth' && tarotClothEnabled) {
+                    continue; 
+                }
                 
                 if(counter) counter.textContent = 0;
                 if(bar) { 
@@ -785,25 +866,22 @@
                 }
                 if(row) row.classList.remove("done");
             }
+            
             localStorage.removeItem("itemTrackerCounts");
             filterItems();
             updateItemStats();
         }
 
         // --- PENALTY STATE MANAGEMENT ---
-        // (This mirrors the Item logic closely, with a few specific exceptions)
         const penCounts = JSON.parse(localStorage.getItem("penaltyTrackerCounts")) || {};
         const penCollapsedStates = JSON.parse(localStorage.getItem("penaltyTrackerCollapsed")) || {};
         const penActiveCats = JSON.parse(localStorage.getItem("penaltyTrackerActiveCats")) || {'penalty-generics': true, 'penalty-threats': true};
         const penHideCompleted = JSON.parse(localStorage.getItem("penaltyTrackerHideCompleted")) || false;
         
-        // Specific state for the "Exclude Heatstroke" feature
         let heatstrokeExcluded = JSON.parse(localStorage.getItem("penaltyTrackerExcludeHeatstroke")) || false;
         
         const penCategoryMap = { 'penalty-generics': [], 'penalty-threats': [] };
         const penCaps = {};
-
-        // Hardcoded custom names for specific penalties where the generic regex spacing fails
         const penNameOverrides = {
             "Balloons4Sale": "Balloons 4 Sale",
             "Chef4Hire": "Chef 4 Hire",
@@ -813,27 +891,23 @@
             "CutTheStrings": "Cut the Strings"
         };
 
-        // Builds the Penalty grid using the fetched JSON data
         function renderPenaltyCategory(data, containerId) {
             const container = document.getElementById(containerId);
-            
             for (const [itemId, item] of Object.entries(data)) {
                 penCounts[itemId] = Math.min(item.cap, penCounts[itemId] || 0);
                 penCaps[itemId] = item.cap;
                 penCategoryMap[containerId].push(itemId);
 
-                // Use the override dictionary if it exists, otherwise use standard regex spacing
-                let displayName = penNameOverrides[itemId] || itemId.replace(/([a-z])([A-Z])/g, '$1 $2')
+                let displayName = penNameOverrides[itemId] ||
+                                  itemId.replace(/([a-z])([A-Z])/g, '$1 $2')
                                         .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
-                                        // Specific regex to handle apostrophes correctly (e.g. "Barry's")
                                         .replace(/([a-z])(['])([a-z])/ig, '$1$2$3');
-
+                                        
                 let displayCount = penCounts[itemId];
                 let percent = (displayCount / item.cap) * 100;
                 let isDone = displayCount === item.cap ? "done" : "";
                 let sparkleClass = displayCount === item.cap ? "sparkle" : "";
-
-                // If Heatstroke is excluded, artificially set its display values to 0 without deleting its saved data
+                
                 if (itemId === 'Heatstroke' && heatstrokeExcluded) {
                     displayCount = 0;
                     percent = 0;
@@ -847,7 +921,6 @@
                 const row = document.createElement("div");
                 row.className = `row ${isDone}`;
                 
-                // Apply 'excluded' styling (greyscale, unclickable) if this is heatstroke and it's disabled
                 if (itemId === 'Heatstroke' && heatstrokeExcluded) {
                     row.classList.add('excluded');
                 }
@@ -879,25 +952,20 @@
             }
         }
 
-        // Logic for checking/unchecking the "Exclude Heatstroke" feature
         function toggleHeatstroke() {
             heatstrokeExcluded = document.getElementById('excludeHeatstrokeCb').checked;
             localStorage.setItem("penaltyTrackerExcludeHeatstroke", JSON.stringify(heatstrokeExcluded));
             const wrapper = document.getElementById('excludeHeatstrokeWrapper');
-            // Toggle highlight on the label button itself
             if (wrapper) heatstrokeExcluded ? wrapper.classList.add('active') : wrapper.classList.remove('active');
             
-            // Find the specific DOM node and alter its visuals without touching `penCounts['Heatstroke']`
             const hsRow = document.getElementById('row-Heatstroke');
             if (hsRow) {
                 const counter = document.getElementById('HeatstrokeCounter');
                 const bar = document.getElementById('HeatstrokeBar');
                 const itemCap = penCaps['Heatstroke'] || 1;
                 const realCount = penCounts['Heatstroke'] || 0;
-
-                // Retrieve the real saved state
+                
                 if (heatstrokeExcluded) {
-                    // Visually disable it
                     hsRow.classList.add('excluded');
                     if (counter) counter.textContent = 0;
                     if (bar) {
@@ -907,7 +975,6 @@
                     }
                     hsRow.classList.remove('done');
                 } else {
-                    // Visually restore it to its actual saved state
                     hsRow.classList.remove('excluded');
                     if (counter) counter.textContent = realCount;
                     if (bar) {
@@ -921,12 +988,10 @@
                     else hsRow.classList.remove('done');
                 }
             }
-            // Math recalculation is required because maximum potential points just shifted
             updatePenaltyStats();
             filterPenalties();
         }
 
-        // Similar to toggleItemSection
         function togglePenaltySection(containerId) {
             const container = document.getElementById(containerId);
             const btn = document.getElementById('btn-' + containerId);
@@ -936,7 +1001,6 @@
             localStorage.setItem("penaltyTrackerCollapsed", JSON.stringify(penCollapsedStates));
         }
 
-        // Similar to toggleItemCategoryVisibility
         function togglePenaltyCategoryVisibility(id) {
             penActiveCats[id] = !penActiveCats[id];
             localStorage.setItem("penaltyTrackerActiveCats", JSON.stringify(penActiveCats));
@@ -953,25 +1017,19 @@
             filterPenalties();
         }
 
-        // Recalculates penalty math. Special case handling included for Heatstroke exclusion.
         function updatePenaltyStats() {
             let totalPossibleAll = 0, currentAll = 0;
-
             for (const [catId, itemIds] of Object.entries(penCategoryMap)) {
                 let catPossible = 0, catCurrent = 0;
-                
                 itemIds.forEach(id => { 
                     let cap = penCaps[id] || 0;
                     catPossible += cap;
-                    // If Heatstroke is excluded, subtract its cap from the total possible denominator, 
-                    // and do not add its count to the current numerator.
                     if (id === 'Heatstroke' && heatstrokeExcluded) {
                         catPossible -= cap; 
                     } else {
                         catCurrent += (penCounts[id] || 0); 
                     }
                 });
-                
                 totalPossibleAll += catPossible; currentAll += catCurrent;
                 
                 const catPercent = catPossible > 0 ? Math.round((catCurrent / catPossible) * 100) : 0;
@@ -984,7 +1042,6 @@
                 const remElem = document.getElementById(`rem-${catId}`);
                 
                 if (textElem) textElem.textContent = `${catPercent}%`;
-                
                 if (catRemaining === 0 && catPossible > 0) {
                     if (remElem) remElem.textContent = `(MAX)`;
                     if (pill) pill.classList.add('complete');
@@ -1004,7 +1061,6 @@
             const totalPercent = totalPossibleAll > 0 ? Math.round((currentAll / totalPossibleAll) * 100) : 0;
             const compText = document.getElementById('penCompletionText');
             const mainFill = document.getElementById('penProgressFill');
-            
             if (compText) compText.textContent = `${currentAll} / ${totalPossibleAll} penalties (${totalPercent}%)`;
             if (mainFill) {
                 mainFill.style.width = totalPercent + '%';
@@ -1012,18 +1068,12 @@
             }
         }
 
-        // Empty the search input, trigger visual flash, and re-filter for penalties
         function clearPenaltySearch() {
             const searchInput = document.getElementById('penSearch');
-
-            // Reset and trigger the flash animation
             searchInput.classList.remove('flash');
-            void searchInput.offsetWidth; // Trigger reflow to restart animation
+            void searchInput.offsetWidth; 
             searchInput.classList.add('flash');
-
-            // Clean up the animation class after it finishes (500ms)
             setTimeout(() => searchInput.classList.remove('flash'), 500);
-
             searchInput.value = '';
             filterPenalties();
             searchInput.focus();
@@ -1035,15 +1085,14 @@
             const clearBtn = document.getElementById('clearBtnPenalties');
             
             if (clearBtn) clearBtn.style.display = query.length > 0 ? 'block' : 'none';
-            
             localStorage.setItem("penaltyTrackerHideCompleted", JSON.stringify(hideDone));
             const wrapper = document.getElementById('penHideCompletedWrapper');
             if(wrapper) hideDone ? wrapper.classList.add('active') : wrapper.classList.remove('active');
-
+            
             document.querySelectorAll('#tab-penalties .row').forEach(row => {
                 const name = row.querySelector('.item-name').textContent.toLowerCase();
                 let isDone = row.classList.contains('done');
-                // If "Hide Completed" is on, Heatstroke also needs to hide if it is currently excluded
+                
                 if (row.id === 'row-Heatstroke' && heatstrokeExcluded) isDone = true;
                 
                 const shouldBeVisible = name.includes(query) && (!hideDone || !isDone);
@@ -1058,21 +1107,29 @@
             });
         }
 
-        // Logic for updating penalty counts.
-        // Prevents action entirely if heatstroke is currently excluded.
         function updatePen(delta, cap, itemId, event) {
             if (event) event.stopPropagation();
-            
-            // Block interaction for excluded heatstroke
+
             if (itemId === 'Heatstroke' && heatstrokeExcluded) return;
-            
-            penCounts[itemId] = Math.min(cap, Math.max(0, (penCounts[itemId] || 0) + delta));
+
+            let current = penCounts[itemId] || 0;
+
+            if (event && event.shiftKey) {
+                penCounts[itemId] = (current === cap) ? 0 : cap;
+            } 
+            else if (current === cap && delta > 0) {
+                penCounts[itemId] = Math.max(0, current - 1);
+            } 
+            else {
+                penCounts[itemId] = Math.min(cap, Math.max(0, current + delta));
+            }
+
             const rowElement = document.getElementById(`row-${itemId}`);
             const percent = (penCounts[itemId] / cap) * 100;
             const safeId = escapeId(itemId);
             const counter = document.getElementById(`${safeId}Counter`);
             const bar = document.getElementById(`${safeId}Bar`);
-            
+
             if (counter) counter.textContent = penCounts[itemId];
             if (bar) {
                 bar.style.width = percent + '%';
@@ -1086,47 +1143,46 @@
             updatePenaltyStats();
         }
 
-        // Wipes all penalty data from localStorage
         function resetAllPenalties() {
             if (!confirm("Reset all penalty progress?")) return;
+            
             for (const itemId in penCounts) {
-                penCounts[itemId] = 0;
+                penCounts[itemId] = 0; 
+                
                 const row = document.getElementById(`row-${itemId}`);
                 const safeId = escapeId(itemId);
                 const bar = document.getElementById(`${safeId}Bar`);
                 const counter = document.getElementById(`${safeId}Counter`);
                 
-                // Keep Heatstroke looking disabled/excluded if the setting is active, otherwise reset it normally
-                if (itemId !== 'Heatstroke' || !heatstrokeExcluded) {
-                    if (counter) counter.textContent = 0;
-                    if (bar) { 
-                        bar.style.width = '0%';
-                        bar.style.backgroundColor = getPenaltyProgressColor(0);
-                        bar.classList.remove("sparkle");
-                    }
-                    if (row) row.classList.remove("done");
+                if (itemId === 'Heatstroke' && heatstrokeExcluded) {
+                    continue; 
                 }
+                
+                if (counter) counter.textContent = 0;
+                if (bar) { 
+                    bar.style.width = '0%';
+                    bar.style.backgroundColor = getPenaltyProgressColor(0);
+                    bar.classList.remove("sparkle");
+                }
+                if (row) row.classList.remove("done");
             }
+            
             localStorage.removeItem("penaltyTrackerCounts");
             filterPenalties();
             updatePenaltyStats();
         }
 
-        // Helper function to fetch JSON files asynchronously
         async function fetchJsonData(url) {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Could not load ${url}`);
             return await response.json();
         }
 
-        // INITIALIZATION SCRIPT - Runs when the DOM is fully loaded
         window.onload = async () => {
-            // Restore last active tab
             const savedTab = localStorage.getItem('runTrackerActiveTab') || 'items';
             switchTab(savedTab);
 
             try {
-                // Fetch all JSON files simultaneously to speed up loading
                 const [itemGenericData, itemTarotData, itemWofData, penaltyGenericData, penaltyThreatData] = await Promise.all([
                     fetchJsonData('item-generic-data.json'),
                     fetchJsonData('item-tarot-data.json'),
@@ -1135,19 +1191,22 @@
                     fetchJsonData('penalty-threat-data.json')
                 ]);
 
-                // Render Items using the fetched data
                 renderItemCategory(itemGenericData, "item-generics");
                 renderItemCategory(itemTarotData, "item-tarots");
                 renderItemCategory(itemWofData, "item-wofs");
                 
-                // Restore 'Hide Completed' state for items
                 const itemCb = document.getElementById('itemHideCompletedCb');
                 if(itemCb) {
                     itemCb.checked = itemHideCompleted;
                     if(itemHideCompleted) document.getElementById('itemHideCompletedWrapper').classList.add('active');
                 }
+                
+                const tcCb = document.getElementById('enableTarotClothCb');
+                if(tcCb) {
+                    tcCb.checked = tarotClothEnabled;
+                    if(tarotClothEnabled) document.getElementById('enableTarotClothWrapper').classList.add('active');
+                }
 
-                // Restore collapsed state for item sections
                 ['item-generics', 'item-tarots', 'item-wofs'].forEach(id => {
                     if (itemCollapsedStates[id]) {
                         const container = document.getElementById(id);
@@ -1156,30 +1215,25 @@
                         if (btn) btn.textContent = 'Expand';
                     }
                 });
-                
-                // Perform initial filtering and math calculations for Items
+
                 applyItemVisibilityStates();
                 updateItemStats();
 
-                // Render Penalties using the fetched data
                 renderPenaltyCategory(penaltyGenericData, "penalty-generics");
                 renderPenaltyCategory(penaltyThreatData, "penalty-threats");
                 
-                // Restore 'Hide Completed' state for penalties
                 const penCb = document.getElementById('penHideCompletedCb');
                 if(penCb) {
                     penCb.checked = penHideCompleted;
                     if(penHideCompleted) document.getElementById('penHideCompletedWrapper').classList.add('active');
                 }
                 
-                // Restore 'Exclude Heatstroke' state
                 const hsCb = document.getElementById('excludeHeatstrokeCb');
                 if(hsCb) {
                     hsCb.checked = heatstrokeExcluded;
                     if(heatstrokeExcluded) document.getElementById('excludeHeatstrokeWrapper').classList.add('active');
                 }
                 
-                // Restore collapsed state for penalty sections
                 ['penalty-generics', 'penalty-threats'].forEach(id => {
                     if (penCollapsedStates[id]) {
                         const container = document.getElementById(id);
@@ -1188,8 +1242,7 @@
                         if (btn) btn.textContent = 'Expand';
                     }
                 });
-                
-                // Perform initial filtering and math calculations for Penalties
+
                 applyPenaltyVisibilityStates();
                 updatePenaltyStats();
 
